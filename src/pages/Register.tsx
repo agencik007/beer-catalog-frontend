@@ -1,5 +1,10 @@
-import React, {SyntheticEvent, useState} from "react";
+import React, {SyntheticEvent, useEffect, useState} from "react";
 import {FaUser} from 'react-icons/fa';
+import {useSelector, useDispatch} from 'react-redux';
+import {useNavigate} from 'react-router-dom';
+import {toast} from 'react-toastify';
+import {register, reset} from '../features/auth/authSlice';
+import {Spinner} from '../components/Spinner';
 
 export function Register() {
     const [formData, setFormData] = useState({
@@ -11,6 +16,24 @@ export function Register() {
 
     const {name, email, password, password2} = formData;
 
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const {user, isLoading, isError, isSuccess, message} = useSelector((state: any) => state.auth);
+
+    useEffect(() => {
+        if (isError) {
+            toast.error(message);
+        }
+
+        if (isSuccess || user) {
+            navigate('/');
+        }
+
+        dispatch(reset());
+
+    }, [user, isError, isSuccess, message, navigate, dispatch])
+
     const onChange = (e: SyntheticEvent) => {
         setFormData((prevState) => ({
             ...prevState,
@@ -20,6 +43,24 @@ export function Register() {
 
     const onSubmit = (e: SyntheticEvent) => {
         e.preventDefault();
+
+        if (password !== password2) {
+            toast.error('Passwords do not match.');
+        } else {
+            const userData = {
+                name,
+                email,
+                password
+            }
+
+            toast.success('Successfully registered!');
+            // @ts-ignore
+            dispatch(register(userData));
+        }
+    }
+
+    if (isLoading) {
+        return <Spinner />
     }
 
     return <>
@@ -76,12 +117,25 @@ export function Register() {
                         />
                     </div>
                     <div className="form-group">
+                        <label htmlFor="adult">
+                            Please confirm the checkbox below that you are over 18 years old.
+                        </label>
+                        <input
+                            type="checkbox"
+                            className="form-control"
+                            name="adult"
+                            onChange={onChange}
+                            required={true}
+                        />
+                    </div>
+                    <div className="form-group">
                         <button
                             type="submit"
                             className="btn btn-block">
                             Submit
                         </button>
                     </div>
+
                 </form>
             </section>
         </section>
