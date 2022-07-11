@@ -46,6 +46,8 @@ export function Register() {
 
         if (password !== password2) {
             toast.error('Passwords do not match.');
+        } else if (!name || !email) {
+            toast.error('Please enter your credentials.');
         } else {
             const userData = {
                 name,

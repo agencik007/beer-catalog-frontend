@@ -1,16 +1,24 @@
 import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 import authService from './authService';
-import {UserEntity} from "../../../types/user.entity";
+import {UserEntity} from "types";
 
 //Get user from localStorage
 const user = JSON.parse(localStorage.getItem('user')!);
 
-const initialState = {
+interface AuthUserInterface {
+    user: UserEntity | null;
+    isError: boolean;
+    isSuccess: boolean;
+    isLoading: boolean;
+    message: string | unknown;
+}
+
+const initialState: AuthUserInterface = {
     user: user ? user : null,
     isError: false,
     isSuccess: false,
     isLoading: false,
-    message: ''
+    message: '',
 }
 
 // Register user
@@ -51,35 +59,35 @@ const authSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(register.pending, (state) => {
+            .addCase(register.pending, (state: AuthUserInterface) => {
                 state.isLoading = true;
             })
-            .addCase(register.fulfilled, (state, action) => {
+            .addCase(register.fulfilled, (state: AuthUserInterface, action) => {
                 state.isLoading = false;
                 state.isSuccess = true;
                 state.user = action.payload;
             })
-            .addCase(register.rejected, (state, action) => {
+            .addCase(register.rejected, (state: AuthUserInterface, action) => {
                 state.isLoading = false;
                 state.isError = true;
-                state.message = action.payload as any;
+                state.message = action.payload;
                 state.user = null;
             })
-            .addCase(login.pending, (state) => {
+            .addCase(login.pending, (state: AuthUserInterface) => {
                 state.isLoading = true;
             })
-            .addCase(login.fulfilled, (state, action) => {
+            .addCase(login.fulfilled, (state: AuthUserInterface, action) => {
                 state.isLoading = false;
                 state.isSuccess = true;
                 state.user = action.payload;
             })
-            .addCase(login.rejected, (state, action) => {
+            .addCase(login.rejected, (state: AuthUserInterface, action) => {
                 state.isLoading = false;
                 state.isError = true;
-                state.message = action.payload as any;
+                state.message = action.payload;
                 state.user = null;
             })
-            .addCase(logout.fulfilled, (state) => {
+            .addCase(logout.fulfilled, (state: AuthUserInterface) => {
                 state.user = null;
             })
     }

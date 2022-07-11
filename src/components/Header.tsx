@@ -1,10 +1,11 @@
 import React from "react";
 import {FaSignInAlt, FaSignOutAlt} from 'react-icons/fa';
+import {IoIosBeer} from 'react-icons/io';
 import {Link, useNavigate} from 'react-router-dom';
 import {useSelector, useDispatch} from "react-redux";
 import {logout, reset} from "../features/auth/authSlice";
 
-export function Header() {
+export const Header = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -17,6 +18,10 @@ export function Header() {
         navigate('/')
     }
 
+    function toCreateBeerForm() {
+        navigate('/create');
+    }
+
     return (
         <header className='header'>
             <div className='logo'>
@@ -24,20 +29,31 @@ export function Header() {
             </div>
             <ul>
                 {user ? (
-                    <li>
-                        <button className='btn' onClick={onLogout}>
-                            <FaSignOutAlt /> Logout
-                        </button>
-                    </li>
+                    <>
+                        <li>
+                            <button className='btn' onClick={toCreateBeerForm}>
+                                <IoIosBeer /> Create beer
+                            </button>
+                        </li>
+                        <li>
+                            <button className='btn' onClick={onLogout}>
+                                <FaSignOutAlt /> Logout
+                            </button>
+                        </li>
+                    </>
                 ) : (<>
                     <li>
                         <Link to='/login'>
-                            <FaSignInAlt /> Login
+                            <button className="btn">
+                                <FaSignInAlt /> Login
+                            </button>
                         </Link>
                     </li>
                     <li>
                         <Link to='/register'>
-                            <FaSignOutAlt /> Register
+                            <button className='btn'>
+                                <FaSignOutAlt /> Register
+                            </button>
                         </Link>
                     </li>
                 </>)}

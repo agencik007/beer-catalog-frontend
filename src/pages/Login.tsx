@@ -5,7 +5,7 @@ import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {login, reset} from '../features/auth/authSlice';
 import {Spinner} from '../components/Spinner';
-import {UserEntity} from "../../types/user.entity";
+import {UserEntity} from "types";
 
 export function Login() {
     const [formData, setFormData] = useState({
@@ -71,6 +71,7 @@ export function Login() {
                             type="email"
                             className="form-control"
                             id="email"
+                            required={true}
                             name="email"
                             value={email}
                             placeholder="Enter your email"
@@ -83,6 +84,7 @@ export function Login() {
                             className="form-control"
                             id="password"
                             name="password"
+                            required={true}
                             value={password}
                             placeholder="Enter your password"
                             onChange={onChange}

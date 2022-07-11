@@ -1,5 +1,5 @@
 import axios from "axios";
-import {UserEntity} from "../../../types/user.entity";
+import {UserEntity} from "types";
 import {toast} from "react-toastify";
 
 const API_URL = 'http://localhost:3001/api/users/';
