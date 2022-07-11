@@ -16,7 +16,7 @@ export const createBeer = async (beer: BeerEntity, token: any) => {
     return response.data;
 }
 
-// Get beers
+// Get all beers
 export const getBeers = async () => {
     // const config = {
     //     headers: {
@@ -30,7 +30,19 @@ export const getBeers = async () => {
     return response.data;
 }
 
+// Get user beers
+export const userBeers = async () => {
+
+    const json: any = localStorage.getItem('user');
+    const userId = JSON.parse(json);
+
+    const response = await axios.get(API_URL);
+
+    return response.data.filter((beer: BeerEntity) => beer.user === userId._id);
+}
+
 export const beerService = {
     createBeer,
     getBeers,
+    userBeers,
 }

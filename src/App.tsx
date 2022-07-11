@@ -6,6 +6,7 @@ import {Main} from './pages/Main';
 import {Login} from './pages/Login';
 import {Register} from './pages/Register';
 import {CreateBeerForm} from "./pages/CreateBeerForm";
+import {UserBeers} from "./pages/UserBeers";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
                 <Routes>
                     <Route path='/' element={<Main />} />
                     <Route path='/login' element={<Login />} />
+                    <Route path='/user' element={<UserBeers />} />
                     <Route path='/register' element={<Register />} />
                     <Route path='/create' element={<CreateBeerForm />} />
                 </Routes>

@@ -22,6 +22,10 @@ export const Header = () => {
         navigate('/create');
     }
 
+    function toUserBeers() {
+        navigate('/user');
+    }
+
     return (
         <header className='header'>
             <div className='logo'>
@@ -33,6 +37,11 @@ export const Header = () => {
                         <li>
                             <button className='btn' onClick={toCreateBeerForm}>
                                 <IoIosBeer /> Create beer
+                            </button>
+                        </li>
+                        <li>
+                            <button className='btn' onClick={toUserBeers}>
+                                <IoIosBeer /> Your Beers
                             </button>
                         </li>
                         <li>

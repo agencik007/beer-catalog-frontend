@@ -228,3 +228,17 @@ input[type=checkbox]
         font-size: 1.5rem;
     }
 }
+
+@media screen and (max-width: 960px) {
+    .header {
+        display: block;
+    }
+    .header ul {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .header ul li {
+        padding: 20px;
+    }
+}
