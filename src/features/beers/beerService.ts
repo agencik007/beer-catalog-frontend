@@ -1,7 +1,8 @@
 import axios from "axios";
 import {BeerEntity} from 'types';
+import {apiUrl} from "../../config/api";
 
-const API_URL = 'http://localhost:3001/api/beers/';
+const API_URL = apiUrl + '/api/beers/';
 
 // Create new beer
 export const createBeer = async (beer: BeerEntity, token: any) => {

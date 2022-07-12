@@ -1,8 +1,9 @@
 import axios from "axios";
 import {UserEntity} from "types";
 import {toast} from "react-toastify";
+import {apiUrl} from "../../config/api";
 
-const API_URL = 'http://localhost:3001/api/users/';
+const API_URL = apiUrl +'/api/users/';
 
 // Register user
 export const register = async (userData: UserEntity) => {

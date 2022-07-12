@@ -1,7 +1,7 @@
 {
   "name": "frontend",
   "version": "0.1.0",
-  "proxy": "http://localhost:3001",
+  "proxy": "http://localhost:5000",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.3",
@@ -26,10 +26,11 @@
   },
   "scripts": {
     "start": "react-app-rewired start",
-    "build:win": "set REACT_APP_API_URL=/api&& react-app-rewired build",
-    "build:unix": "REACT_APP_API_URL=/api react-app-rewired build",
+    "build:win": "react-app-rewired build",
+    "build:unix": "react-app-rewired build",
     "test": "react-app-rewired test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
   },
   "eslintConfig": {
     "extends": [
