@@ -1,16 +1,29 @@
-import React from 'react';
+import React, {SyntheticEvent} from 'react';
 import StarsRating from 'react-star-rate';
+import {useDispatch} from "react-redux";
+import {deleteBeer} from '../features/beers/beerSlice';
 
 import BeerImage from '../assets/images/beer.png';
 import './BeerItem.css';
+import {toast} from "react-toastify";
 
 
 
 // @ts-ignore
 export const BeerItem = ({beer}) =>  {
+    const dispatch = useDispatch();
 
-    // const json: any = localStorage.getItem('user');
-    // const userId = JSON.parse(json);
+    const onSubmit = (e: SyntheticEvent) => {
+        e.preventDefault();
+
+        // @ts-ignore
+        dispatch(deleteBeer(beer._id))
+
+        toast.success('Successfully deleted.')
+    }
+
+    const json: any = localStorage.getItem('user');
+    const userId = JSON.parse(json);
 
     return (
         <div className="card">
@@ -34,13 +47,16 @@ export const BeerItem = ({beer}) =>  {
                         />
                     </div>
                     <small className="date">Created: {new Date(beer.createdAt).toLocaleDateString('pl-PL')} by {beer.createdBy}</small>
-                    {/*{!userId ? null : (*/}
-                    {/*    <>*/}
-                    {/*        {beer.user === userId._id ? (*/}
-                    {/*            <button className="btn btn-block">Edit beer</button>*/}
-                    {/*        ) : null}*/}
-                    {/*    </>*/}
-                    {/*)}*/}
+                    {!userId ? null : (
+                        <>
+                            {beer.user === userId._id ? (
+                                <button
+                                    className="close"
+                                    onClick={onSubmit}
+                                >Delete</button>
+                            ) : null}
+                        </>
+                    )}
                 </div>
             </div>
         </div>
