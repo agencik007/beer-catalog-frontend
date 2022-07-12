@@ -1,16 +1,17 @@
-import React, {SyntheticEvent} from "react";
+import React, {ChangeEvent, SyntheticEvent} from "react";
 import {useState} from 'react';
 import {useDispatch} from "react-redux";
 import {createBeer} from '../features/beers/beerSlice';
 import {BeerEntity} from 'types';
 import {toast} from "react-toastify";
+
 import '../index.css';
 
 export function CreateBeerForm() {
-    const [text, setText] = useState<any | null>({
+    const [text, setText] = useState({
         name: '',
         type: '',
-        rating: 1,
+        rating: 0,
         description: '',
         alcohol: 0,
         avatar: '',
@@ -18,7 +19,7 @@ export function CreateBeerForm() {
 
     const dispatch = useDispatch();
 
-    const onChange = (e: any) => {
+    const onChange = (e: ChangeEvent) => {
         setText((prevState: any) => ({
             ...prevState,
             [(e.target as HTMLTextAreaElement).name]: (e.target as HTMLTextAreaElement).value,
@@ -30,14 +31,7 @@ export function CreateBeerForm() {
 
         // @ts-ignore
         dispatch(createBeer(text));
-        setText({
-            name: '',
-            type: '',
-            rating: 1,
-            description: '',
-            alcohol: 0,
-            avatar: '',
-        });
+
         toast.success('Successfully created.')
     }
 
@@ -52,6 +46,7 @@ export function CreateBeerForm() {
                             type="text"
                             name="name"
                             id="name"
+                            required={true}
                             placeholder="Name of beer..."
                             value={text.name}
                             onChange={onChange}
@@ -66,7 +61,7 @@ export function CreateBeerForm() {
                             required={true}
                             onChange={onChange}
                         >
-                            <option>Please select type</option>
+                            <option value="">Please select type</option>
                             <option value="IPA">IPA</option>
                             <option value="APA">APA</option>
                             <option value="Lager">Lager</option>
@@ -94,6 +89,7 @@ export function CreateBeerForm() {
                         <textarea
                             name="description"
                             id="description"
+                            required={true}
                             placeholder="Please type some description..."
                             maxLength={200}
                             value={text.description}
@@ -107,7 +103,7 @@ export function CreateBeerForm() {
                                 type="number"
                                 name="alcohol"
                                 id="percentages"
-                                min={0}
+                                min={0.1}
                                 max={100}
                                 step={0.1}
                                 value={text.alcohol}
@@ -117,7 +113,7 @@ export function CreateBeerForm() {
                         </div>
                     </label>
                     <label>
-                        <small>Please add web address with image - PNG format</small>
+                        <small>Please add web address with image - PNG format - or leave blank</small>
                         <input
                             type="text"
                             name="avatar"

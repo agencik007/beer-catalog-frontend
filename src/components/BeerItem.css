@@ -70,6 +70,7 @@ small {
 .right {
     height: 100%;
     min-height: 390px;
+    /*max-height: 460px;*/
     width: 80%;
     position: relative;
     left: 148px;
