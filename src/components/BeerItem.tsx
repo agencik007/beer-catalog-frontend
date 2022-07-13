@@ -23,7 +23,7 @@ export const BeerItem = ({beer}) =>  {
     }
 
     const json: any = localStorage.getItem('user');
-    const userId = JSON.parse(json);
+    const user = JSON.parse(json);
 
     return (
         <div className="card">
@@ -47,9 +47,9 @@ export const BeerItem = ({beer}) =>  {
                         />
                     </div>
                     <small className="date">Created: {new Date(beer.createdAt).toLocaleDateString('pl-PL')} by {beer.createdBy}</small>
-                    {!userId ? null : (
+                    {!user ? null : (
                         <>
-                            {beer.user === userId._id ? (
+                            {beer.user === user._id || user.role === 'admin' ? (
                                 <button
                                     className="close"
                                     onClick={onSubmit}
