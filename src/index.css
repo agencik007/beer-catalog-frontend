@@ -239,6 +239,7 @@ input[type=checkbox]
     }
 
     .header ul li {
-        padding: 20px;
+        padding: 5px;
+        margin-left: 0;
     }
 }

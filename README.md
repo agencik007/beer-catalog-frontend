@@ -1,3 +1,50 @@
+# Author information
+Hello and welcome to my very first big project.
+You can check it out on [World of beers](https://beercatalog.networkmanager.pl/) website. 
+
+I divided the project into
+[Frontend](https://github.com/agencik007/beer-catalog-frontend/tree/develop) and
+[Backend](https://github.com/agencik007/beer-catalog-backend/tree/develop).
+Is not finished due to the 
+limited amount of time (one month). In the future, I will be fixing it and adding new functionalities such as:
+- waiting room
+- comments
+- admin panel
+- pagination
+- searching
+- editing beers
+
+Right now you can:
+- see all beers added by registered users
+- create your own account secured by password hashing in the MongoDB database
+- log in and create, delete your own beer
+
+# Configuration
+To run this project on your computer you need to follow these steps:
+1. Create a database in MongoDB and a beer-catalog collection where users and beers will be recorded. It is simple 
+   to do, you can use the online version of MongoDB Atlas without installing any software. It should looks like this: <a href="https://imgbb.com/"><img src="https://i.ibb.co/0hmyvfh/mongodb-collection.png" alt="mongodb-collection" border="0"></a>
+2. Set the file .env in backend folder and type your credentials. 
+
+   NODE_ENV = development
+
+   MONGO_URI = PUT YOUR CONNECTION URI TO MONGODB
+
+   ADMIN_EMAIL = TYPE YOUR EMAIL
+
+   JWT_SECRET = TYPE YOUR SECRET CODE
+   PORT = 5000
+3. MongoDB URI is stored in you mongodb connect tab. You can also specify 'beer-catalog' collection like this: 
+   'mongodb+srv://admin:password@cluster0.deo9b.mongodb.net/beer-catalog?retryWrites=true&w=majority'
+   <a href="https://ibb.co/4p94yBp"><img src="https://i.ibb.co/njZQ2hj/mongo-uri.png" alt="mongo-uri" border="0"></a> 
+4. After entering ADMIN_EMAIL you can create your account on the website with this address and be able to delete all 
+   beer 
+   records.
+5. Set a strong password in the JWT_SECRET field.
+6. In frontend folder you have to check tsconfig.paths.json file and type correct directory for types in backend 
+   folder. 
+
+Thats all. You can see how it works by run backend with start:dev script and frontend with start script. Enjoy :)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) TS template.

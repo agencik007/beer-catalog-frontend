@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
 import {UserEntity} from "types";
 import {toast} from "react-toastify";
 import {apiUrl} from "../../config/api";
@@ -18,20 +18,20 @@ export const register = async (userData: UserEntity) => {
 
 // Login user
 export const login = async (userData: UserEntity) => {
+
     try {
         const response = await axios.post(API_URL + 'login', userData);
 
+
         if (response.data) {
             localStorage.setItem('user', JSON.stringify(response.data));
+            toast.success('Successfully logged in!');
+            return response.data;
         }
 
-        toast.success('Successfully logged in!');
-
-        return response.data;
     } catch (error) {
         toast.error('Invalid email or password.')
     }
-
 }
 
 // Logout user
