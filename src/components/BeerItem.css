@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css?family=Muli');
+
+h1 {
+    color: #ff6d39;
+    font-family: "muli", sans-serif;
+    font-weight: bold;
+    font-size: 32px;
+    padding-top: 20px;
+    margin-top: 21px;
+    transition: 1s;
+    display: inline-block;
+}
+
+h1:hover {
+    color: #ffffff;
+}
+
+h2 {
+    color: #ffffff;
+    font-family: "muli", sans-serif;
+    margin-top: 10px;
+    font-weight: 800;
+    font-size: 26px;
+    transition: 1s;
+}
+
+h2:hover {
+    color: #ff6d39;
+}
+
+#description {
+    font-size: 1rem;
+    letter-spacing: 2px;
+    padding-bottom: 15px;
+}
+
+small {
+    position: relative;
+    bottom: 0;
+    right: 0;
+    font-size: 14px;
+}
+
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+    min-height: 390px;
+    box-shadow: 0px 15px 50px 10px rgb(0 0 0 / 40%);
+    margin: 4% auto 0;
+}
+
+.card .close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+.left {
+    position: absolute;
+    height: 100%;
+    width: 300px;
+    transition: 0.5s;
+    background-color: #ff6d39;
+    border-radius: 50%;
+    z-index: 5;
+}
+
+.left:hover {
+    transform: scale(1.1);
+}
+
+.right {
+    height: 100%;
+    min-height: 390px;
+    /*max-height: 460px;*/
+    width: 80%;
+    position: relative;
+    left: 148px;
+    padding-left: 180px;
+    padding-bottom: 25px;
+    padding-right: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    transition: 0.5s;
+    background-color: rgba(42, 47, 64, 0.7);
+    z-index: 3;
+}
+
+.right:hover {
+    transform: scale(1.1);
+}
+
+.image {
+    height: 100%;
+    max-width: 250px;
+    max-height: 435px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
+}
+
+@media screen and (max-width: 960px) {
+    .card {
+        display: block;
+    }
+
+    .left {
+        display: none;
+    }
+
+    .right {
+        width: 100%;
+        left: 0;
+        padding-left: 0;
+        padding-bottom: 25px;
+        padding-right: 0;
+    }
+}
