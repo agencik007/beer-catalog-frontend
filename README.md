@@ -41,6 +41,7 @@ To run this project on your computer you need to follow these steps:
    ADMIN_EMAIL = TYPE YOUR EMAIL
 
    JWT_SECRET = TYPE YOUR SECRET CODE
+   
    PORT = 5000
 3. MongoDB URI is stored in you mongodb connect tab. You can also specify 'beer-catalog' collection like this: 
    'mongodb+srv://admin:password@cluster0.deo9b.mongodb.net/beer-catalog?retryWrites=true&w=majority'
