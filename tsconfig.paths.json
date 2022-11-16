@@ -3,7 +3,7 @@
     "baseUrl": ".",
     "paths": {
       "types": [
-        "../backend/types"
+        "../beer-catalog-backend/types"
       ]
     }
   }
