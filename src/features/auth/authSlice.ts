@@ -1,11 +1,11 @@
-import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
-import authService from './authService';
+import {createSlice} from "@reduxjs/toolkit";
 import {UserEntity} from "types";
+import { login, logout, register } from "./authService";
 
 //Get user from localStorage
 const user = JSON.parse(localStorage.getItem('user')!);
 
-interface AuthUserInterface {
+export interface AuthUserInterface {
     user: UserEntity | null;
     isError: boolean;
     isSuccess: boolean;
@@ -20,31 +20,6 @@ const initialState: AuthUserInterface = {
     isLoading: false,
     message: '',
 }
-
-// Register user
-export const register = createAsyncThunk('auth/register', async (user: UserEntity, thunkAPI) => {
-    try {
-        return await authService.register(user);
-    } catch (error: any) {
-        const message = (error.response && error.respone.data && error.response.data.message) || error.message || error.toString();
-        return thunkAPI.rejectWithValue(message);
-    }
-})
-
-// Login user
-export const login = createAsyncThunk('auth/login', async (user: UserEntity, thunkAPI) => {
-    try {
-        return await authService.login(user);
-    } catch (error: any) {
-        const message = (error.response && error.respone.data && error.response.data.message) || error.message || error.toString();
-        return thunkAPI.rejectWithValue(message);
-    }
-})
-
-export const logout = createAsyncThunk('auth/logout', async() => {
-    await authService.logout();
-})
-
 
 const authSlice = createSlice({
     name: 'auth',

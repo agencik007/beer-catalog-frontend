@@ -1,11 +1,11 @@
 import axios from "axios";
-import {BeerEntity} from 'types';
+import {BeerEntity, UserEntity} from 'types';
 import {apiUrl} from "../../config/api";
 
 const API_URL = apiUrl + '/api/beers/';
 
 // Create new beer
-export const createBeer = async (beer: BeerEntity, token: any) => {
+export const createBeer = async (beer: BeerEntity, token: Partial<UserEntity>) => {
     const config = {
         headers: {
             Authorization: `Bearer ${token}`
@@ -20,22 +20,25 @@ export const createBeer = async (beer: BeerEntity, token: any) => {
 // Get all beers
 export const getBeers = async () => {
     const response = await axios.get(API_URL);
-
+    
     return response.data;
 }
 
 // Get user beers
-export const userBeers = async () => {
-    const json: any = localStorage.getItem('user');
-    const userId = JSON.parse(json);
+export const userBeers = async (token: Partial<UserEntity>) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
 
-    const response = await axios.get(API_URL);
-
-    return response.data.filter((beer: BeerEntity) => beer.user === userId._id);
+    const response = await axios.get(API_URL + 'userbeers', config);
+    
+    return response.data;
 }
 
 // Delete user beer
-export const deleteBeer = async (beerId: Partial<BeerEntity>, token: any) => {
+export const deleteBeer = async (beerId: Partial<BeerEntity>, token: Partial<UserEntity>) => {
     const config = {
         headers: {
             Authorization: `Bearer ${token}`

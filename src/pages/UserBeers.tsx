@@ -1,18 +1,19 @@
-import React from "react";
 import {useEffect} from 'react';
 import {useNavigate} from "react-router-dom";
 import {useSelector, useDispatch} from "react-redux";
 import {Spinner} from "../components/Spinner";
 import {userBeers, reset} from "../features/beers/beerSlice";
 import {BeerItem} from "../components/BeerItem";
+import { AppDispatch, RootState } from "src/app/store";
+import { BeerEntity } from "types";
 
 export function UserBeers() {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const dispatch: AppDispatch = useDispatch();
 
-    const {user} = useSelector((state: any) => state.auth);
+    const {user} = useSelector((state: RootState) => state.auth);
 
-    const {beers, isLoading, isError, message} = useSelector((state: any) => state.beers);
+    const {beers, isLoading, isError, message} = useSelector((state: RootState) => state.beers);
 
     useEffect(() => {
         if (isError) {
@@ -23,7 +24,6 @@ export function UserBeers() {
             navigate('/');
         }
 
-        // @ts-ignore
         dispatch(userBeers());
 
         return () => {
@@ -36,18 +36,17 @@ export function UserBeers() {
         return <Spinner />
     }
 
-
     return <>
         <section className="heading">
-            <h1>Welcome {user.name}</h1>
+            <h1 className="welcome">Welcome {user?.name}</h1>
 
             <p>Your beers</p>
 
             <section className="content">
-                {beers.length > 0 ? (
+                {beers?.length > 0 ? (
                     <div className="beers">
-                        {beers.map((beer: any) => (
-                            <BeerItem key={beer._id} beer={beer} />
+                        {beers?.map((beer: BeerEntity) => (
+                            <BeerItem key={beer._id + ''} beer={beer} />
                         ))}
                     </div>
                 ) : (

@@ -3,19 +3,22 @@ import {FaSignInAlt, FaSignOutAlt} from 'react-icons/fa';
 import {IoIosBeer} from 'react-icons/io';
 import {Link, useNavigate} from 'react-router-dom';
 import {useSelector, useDispatch} from "react-redux";
-import {logout, reset} from "../features/auth/authSlice";
+import {reset} from "../features/auth/authSlice";
+import {logout} from "../features/auth/authService";
+import { AppDispatch } from "src/app/store";
+import { toast } from "react-toastify";
 
 export const Header = () => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const dispatch: AppDispatch = useDispatch();
 
     const {user} = useSelector((state: any) => state.auth);
 
     const onLogout = () => {
-        // @ts-ignore
-        dispatch(logout());
+        dispatch(logout(user));
         dispatch(reset);
         navigate('/')
+        toast.info('Successfully logged out')
     }
 
     function toCreateBeerForm() {

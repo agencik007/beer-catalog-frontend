@@ -3,8 +3,10 @@ import {FaUser} from 'react-icons/fa';
 import {useSelector, useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
-import {register, reset} from '../features/auth/authSlice';
+import {reset} from '../features/auth/authSlice';
+import {register} from '../features/auth/authService';
 import {Spinner} from '../components/Spinner';
+import { AppDispatch } from "src/app/store";
 
 export function Register() {
     const [formData, setFormData] = useState({
@@ -17,7 +19,7 @@ export function Register() {
     const {name, email, password, password2} = formData;
 
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const dispatch: AppDispatch = useDispatch();
 
     const {user, isLoading, isError, isSuccess, message} = useSelector((state: any) => state.auth);
 
@@ -56,7 +58,7 @@ export function Register() {
             }
 
             toast.success('Successfully registered!');
-            // @ts-ignore
+
             dispatch(register(userData));
         }
     }

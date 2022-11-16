@@ -5,14 +5,16 @@ import {useSelector, useDispatch} from "react-redux";
 import {Spinner} from "../components/Spinner";
 import {getBeers, reset} from "../features/beers/beerSlice";
 import {BeerItem} from "../components/BeerItem";
+import { AppDispatch, RootState } from "src/app/store";
+import { BeerEntity } from "types";
 
 export function Main() {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const dispatch: AppDispatch = useDispatch();
 
-    const {user} = useSelector((state: any) => state.auth);
+    const {user} = useSelector((state: RootState) => state.auth);
 
-    const {beers, isLoading, isError, message} = useSelector((state: any) => state.beers);
+    const {beers, isLoading, isError, message} = useSelector((state: RootState) => state.beers);
 
     useEffect(() => {
         if (isError) {
@@ -23,7 +25,6 @@ export function Main() {
             navigate('/');
         }
 
-        // @ts-ignore
         dispatch(getBeers());
 
         return () => {
@@ -36,10 +37,9 @@ export function Main() {
         return <Spinner />
     }
 
-
     return <>
         <section className="heading">
-            <h1>Welcome {user === null ? 'guest' : user.name}</h1>
+            <h1 className="welcome">Welcome {user === null ? 'guest' : user.name}</h1>
 
             {user === null ? (
                 <h3>To create a beer please register an account</h3>
@@ -48,10 +48,10 @@ export function Main() {
             <p>Beers list</p>
 
             <section className="content">
-                {beers.length > 0 ? (
+                {beers?.length > 0 ? (
                     <div className="beers">
-                        {beers.map((beer: any) => (
-                            <BeerItem key={beer._id} beer={beer} />
+                        {beers?.map((beer: BeerEntity) => (
+                            <BeerItem key={beer._id + ''} beer={beer} />
                         ))}
                     </div>
                 ) : (

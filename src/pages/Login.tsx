@@ -3,9 +3,11 @@ import {FaSignInAlt} from 'react-icons/fa';
 import {useSelector, useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
-import {login, reset} from '../features/auth/authSlice';
+import {reset} from '../features/auth/authSlice';
+import {login} from '../features/auth/authService';
 import {Spinner} from '../components/Spinner';
 import {UserEntity} from "types";
+import { AppDispatch } from "src/app/store";
 
 export function Login() {
     const [formData, setFormData] = useState({
@@ -16,7 +18,7 @@ export function Login() {
     const {email, password} = formData;
 
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const dispatch: AppDispatch = useDispatch();
 
     const {user, isLoading, isError, isSuccess, message} = useSelector((state: any) => state.auth);
 
@@ -49,7 +51,6 @@ export function Login() {
             password,
         }
 
-        // @ts-ignore
         dispatch(login(userData));
     }
 

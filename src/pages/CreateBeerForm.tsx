@@ -6,6 +6,8 @@ import {BeerEntity} from 'types';
 import {toast} from "react-toastify";
 
 import '../index.css';
+import { AppDispatch } from "src/app/store";
+import { useNavigate } from "react-router-dom";
 
 export function CreateBeerForm() {
     const [text, setText] = useState({
@@ -17,7 +19,8 @@ export function CreateBeerForm() {
         avatar: '',
     } as BeerEntity);
 
-    const dispatch = useDispatch();
+    const dispatch: AppDispatch = useDispatch();
+    const navigate = useNavigate();
 
     const onChange = (e: ChangeEvent) => {
         setText((prevState: any) => ({
@@ -28,10 +31,11 @@ export function CreateBeerForm() {
 
     const onSubmit = (e: SyntheticEvent) => {
         e.preventDefault();
-
-        // @ts-ignore
+        
         dispatch(createBeer(text));
-
+        
+        navigate('/');
+        
         toast.success('Successfully created.')
     }
 
