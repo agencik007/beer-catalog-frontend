@@ -65,6 +65,10 @@ h2:hover {
   margin: 4% auto 0;
 }
 
+.rating {
+  margin-top: 15px;
+}
+
 .close {
   position: absolute;
   top: 10px;
@@ -93,7 +97,6 @@ h2:hover {
 .right {
   height: 100%;
   min-height: 390px;
-  /*max-height: 460px;*/
   width: 80%;
   position: relative;
   left: 148px;
@@ -103,14 +106,14 @@ h2:hover {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: space-around;
   transition: 0.5s;
   background-color: rgba(42, 47, 64, 0.7);
   z-index: 3;
 }
 
 .right:hover {
-  transform: scale(1.1);
+  transform: scale(0.9);
 }
 
 .image {

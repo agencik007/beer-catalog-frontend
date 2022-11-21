@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { deleteBeer } from "../features/beers/beerSlice";
 import { toast } from "react-toastify";
 import { AppDispatch } from "src/app/store";
-import StarsRating from "react-star-rate";
+import { Rating } from 'react-simple-star-rating'
 
 import "./BeerItem.css";
 const BeerImage = require("../assets/images/beer.png");
@@ -39,7 +39,7 @@ export const BeerItem = ({beer}) => {
           <p id="description">{beer.description}</p>
           <strong className="alcohol">Alcohol: {beer.alcohol}%</strong>
           <div className="rating">
-            <StarsRating value={beer.rating} disabled={true} />
+            <Rating initialValue={beer.rating} readonly/>
           </div>
           <small className="date">
             Created: {new Date(beer.createdAt).toLocaleDateString("pl-PL")} by{" "}
