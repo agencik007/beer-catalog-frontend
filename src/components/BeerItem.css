@@ -113,7 +113,7 @@ h2:hover {
 }
 
 .right:hover {
-  transform: scale(0.9);
+  transform: scale(1.05);
 }
 
 .image {
