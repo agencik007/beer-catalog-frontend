@@ -8,13 +8,9 @@ I wanted to learn redux-toolkit.
 
 
 I divided the project into
-[Frontend](https://github.com/agencik007/beer-catalog-frontend/tree/develop) and
-[Backend](https://github.com/agencik007/beer-catalog-backend/tree/develop). Remeber to use develop branch on both 
-projects.
-Is not finished due to the 
-limited amount of time (one month). Due to lack of time, I did not type everything properly in typescript, which is 
-why you often see @ts-ignore and any type in code. In the future, I will be fixing it and adding new functionalities 
-such as:
+[Frontend](https://github.com/agencik007/beer-catalog-frontend) and
+[Backend](https://github.com/agencik007/beer-catalog-backend)
+Is not finished due to the limited amount of time (one month). Due to lack of time, I did not type everything properly in typescript, which is why you often see @ts-ignore and any type in code. In the future, I will be fixing it and adding new functionalities such as:
 - waiting room
 - comments
 - rating system
