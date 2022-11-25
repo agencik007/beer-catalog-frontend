@@ -56,7 +56,7 @@ export const deleteBeer = async (beerId: string, token: Partial<UserEntity>) => 
         }
     }
 
-    const response = await axios.delete(API_URL + beerId, config);
+    const response = await axios.delete(API_URL + "/" + beerId, config);
 
     return response.data;
 }
