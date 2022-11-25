@@ -1,15 +1,15 @@
-import { SyntheticEvent, useState } from "react";
+import { SyntheticEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteBeer, getBeers } from "../features/beers/beerSlice";
 import { toast } from "react-toastify";
 import { AppDispatch, RootState } from "src/app/store";
 import { Rating } from 'react-simple-star-rating'
+import {BeerEntity} from "types"
 
 import "./BeerItem.css";
 const BeerImage = require("../assets/images/beer.png");
 
-//@ts-ignore
-export const BeerItem = ({beer}) => {
+export const BeerItem = (beer: BeerEntity) => {
   const dispatch: AppDispatch = useDispatch();
 
   const { currentPage, limitPerPage } = useSelector(
@@ -19,7 +19,7 @@ export const BeerItem = ({beer}) => {
   const onSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
 
-    dispatch(deleteBeer(beer._id)).then(() => dispatch(getBeers({
+    dispatch(deleteBeer(beer._id as unknown as string)).then(() => dispatch(getBeers({
       page: currentPage,
       limit: limitPerPage,
     })));

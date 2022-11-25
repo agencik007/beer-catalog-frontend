@@ -59,7 +59,7 @@ export const userBeers = createAsyncThunk('beers/userBeers', async(params: {page
 })
 
 // Delete user beer
-export const deleteBeer = createAsyncThunk('beers/delete', async (id: Partial<BeerEntity>, thunkAPI: any) => {
+export const deleteBeer = createAsyncThunk('beers/delete', async (id: string, thunkAPI: any) => {
     try {
         const token = thunkAPI.getState().auth.user.token;
         return await beerService.deleteBeer(id, token);
@@ -107,7 +107,7 @@ export const beerSlice = createSlice({
             .addCase(getBeers.rejected, (state: BeersStateInterface, action) => {
                 state.isLoading = false;
                 state.isError = true;
-                state.message = action.payload;
+                state.message = action.error.message;
             })
             .addCase(userBeers.pending, (state: BeersStateInterface) => {
                 state.isLoading = true;

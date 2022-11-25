@@ -2,7 +2,7 @@ import axios from "axios";
 import {BeerEntity, UserEntity} from 'types';
 import {apiUrl} from "../../config/api";
 
-const API_URL = apiUrl + '/api/beers/';
+const API_URL = apiUrl + '/api/beers';
 
 // Create new beer
 export const createBeer = async (beer: BeerEntity, token: Partial<UserEntity>) => {
@@ -43,13 +43,13 @@ export const userBeers = async (currentPage: number, limitPerPage: number, token
         }
     }
 
-    const response = await axios.get(API_URL + `userbeers/?page=${params.page}&limit=${params.limit}`, config);
+    const response = await axios.get(API_URL + `/userbeers?page=${params.page}&limit=${params.limit}`, config);
     
     return response.data;
 }
 
 // Delete user beer
-export const deleteBeer = async (beerId: Partial<BeerEntity>, token: Partial<UserEntity>) => {
+export const deleteBeer = async (beerId: string, token: Partial<UserEntity>) => {
     const config = {
         headers: {
             Authorization: `Bearer ${token}`

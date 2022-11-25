@@ -91,10 +91,12 @@ export function Main() {
         <p>Beers list</p>
 
         <section className="content">
-          {results?.length > 0 ? (
+          {Number(currentPage.get("page")) > pageCount ? (
+            <h3>No more beers and pages.</h3>
+          ) : results?.length > 0 ? (
             <div className="beers">
               {results?.map((beer: BeerEntity) => (
-                <BeerItem key={beer._id + ""} beer={beer} />
+                <BeerItem key={beer._id + ""} {...beer} />
               ))}
             </div>
           ) : (
@@ -102,20 +104,27 @@ export function Main() {
           )}
         </section>
       </section>
-      <button disabled={page === 1} onClick={firstPage}>
-        First page
-      </button>
-      <button disabled={page <= 1} onClick={previousPage}>
-        Previous page
-      </button>
+      {Number(currentPage.get("page")) < pageCount && (
+        <div>
+          <button disabled={page === 1 || pageCount === 0} onClick={firstPage}>
+            First page
+          </button>
+          <button disabled={page <= 1} onClick={previousPage}>
+            Previous page
+          </button>
 
-      <button disabled={page >= pageCount} onClick={nextPage}>
-        Next page
-      </button>
+          <button disabled={page >= pageCount} onClick={nextPage}>
+            Next page
+          </button>
 
-      <button disabled={page === pageCount} onClick={lastPage}>
-        Last page
-      </button>
+          <button
+            disabled={page === pageCount || pageCount === 0}
+            onClick={lastPage}
+          >
+            Last page
+          </button>
+        </div>
+      )}
     </>
   );
 }
