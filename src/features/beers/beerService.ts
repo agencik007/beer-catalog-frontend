@@ -18,21 +18,32 @@ export const createBeer = async (beer: BeerEntity, token: Partial<UserEntity>) =
 }
 
 // Get all beers
-export const getBeers = async () => {
-    const response = await axios.get(API_URL);
+export const getBeers = async (currentPage: number, limitPerPage: number) => {
+    const params = {
+        page: currentPage,
+        limit: limitPerPage,
+    }
+
+    const response = await axios.get(API_URL + `?page=${params.page}&limit=${params.limit}`);
     
     return response.data;
 }
 
 // Get user beers
-export const userBeers = async (token: Partial<UserEntity>) => {
+export const userBeers = async (currentPage: number, limitPerPage: number, token: Partial<UserEntity>) => {
+    
+    const params = {
+        page: currentPage,
+        limit: limitPerPage
+    }
+
     const config = {
         headers: {
             Authorization: `Bearer ${token}`
         }
     }
 
-    const response = await axios.get(API_URL + 'userbeers', config);
+    const response = await axios.get(API_URL + `userbeers/?page=${params.page}&limit=${params.limit}`, config);
     
     return response.data;
 }

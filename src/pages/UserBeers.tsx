@@ -1,5 +1,5 @@
-import {useEffect} from 'react';
-import {useNavigate} from "react-router-dom";
+import {SyntheticEvent, useEffect, useState} from 'react';
+import {useNavigate, useSearchParams} from "react-router-dom";
 import {useSelector, useDispatch} from "react-redux";
 import {Spinner} from "../components/Spinner";
 import {userBeers, reset} from "../features/beers/beerSlice";
@@ -13,8 +13,14 @@ export function UserBeers() {
 
     const {user} = useSelector((state: RootState) => state.auth);
 
-    const {beers, isLoading, isError, message} = useSelector((state: RootState) => state.beers);
+    const {results, pageCount, isLoading, isError, message} = useSelector((state: RootState) => state.beers);
 
+    const [currentPage] = useSearchParams();
+    const [limitPerPage] = useSearchParams();
+
+    const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(5);
+    
     useEffect(() => {
         if (isError) {
             console.log(message);
@@ -24,16 +30,25 @@ export function UserBeers() {
             navigate('/');
         }
 
-        dispatch(userBeers());
+        dispatch(userBeers({page: Number(currentPage.get('page')) || 1, limit: Number(limitPerPage.get('limit') || 5)}));
 
         return () => {
             dispatch(reset());
         }
 
-    }, [user, navigate, isError, message, dispatch])
+    }, [user, navigate, currentPage, limitPerPage, page, limit, isError, message, dispatch])
 
     if (isLoading) {
         return <Spinner />
+    }
+
+    const nextPage = (e: SyntheticEvent) => {
+        e.preventDefault();
+        setPage(Number(page + 1));
+    }
+    const previousPage = (e: SyntheticEvent) => {
+        e.preventDefault();
+        setPage(Number(page - 1));
     }
 
     return <>
@@ -43,9 +58,9 @@ export function UserBeers() {
             <p>Your beers</p>
 
             <section className="content">
-                {beers?.length > 0 ? (
+                {results?.length > 0 ? (
                     <div className="beers">
-                        {beers?.map((beer: BeerEntity) => (
+                        {results?.map((beer: BeerEntity) => (
                             <BeerItem key={beer._id + ''} beer={beer} />
                         ))}
                     </div>
@@ -54,5 +69,14 @@ export function UserBeers() {
                 )}
             </section>
         </section>
+        {page === 1 || page < 1 ? 
+            <button disabled onClick={previousPage}>Previous page</button> :
+            <button onClick={previousPage}>Previous page</button>       
+        }
+        
+        {page === pageCount || page > pageCount ?
+            <button disabled onClick={nextPage}>Next page</button> :
+            <button onClick={nextPage}>Next page</button> 
+        }
     </>
 }

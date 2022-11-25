@@ -3,7 +3,11 @@ import {beerService} from "./beerService";
 import {BeerEntity} from 'types';
 
 interface BeersStateInterface {
-    beers: BeerEntity[],
+    currentPage: number;
+    itemCount: number;
+    pageCount: number;
+    limitPerPage: number;
+    results: BeerEntity[];
     isError: boolean,
     isSuccess: boolean,
     isLoading: boolean,
@@ -11,7 +15,11 @@ interface BeersStateInterface {
 }
 
 const initialState: BeersStateInterface = {
-    beers: [],
+    currentPage: 1,
+    itemCount: 0,
+    pageCount: 0,
+    limitPerPage: 0,
+    results: [],
     isError: false,
     isSuccess: false,
     isLoading: false,
@@ -30,9 +38,9 @@ export const createBeer = createAsyncThunk('beers/create', async (beer: BeerEnti
 })
 
 // Get all beers
-export const getBeers = createAsyncThunk('beers/getAll', async (_, thunkAPI: any) => {
+export const getBeers = createAsyncThunk('beers/getAll', async(params: {page: number, limit: number}, thunkAPI: any) => {
     try {
-        return await beerService.getBeers();
+        return await beerService.getBeers(params.page, params.limit);
     } catch (error: any) {
         const message = (error.response && error.respone.data && error.response.data.message) || error.message || error.toString();
         return thunkAPI.rejectWithValue(message);
@@ -40,10 +48,10 @@ export const getBeers = createAsyncThunk('beers/getAll', async (_, thunkAPI: any
 })
 
 // Get user beers
-export const userBeers = createAsyncThunk('beers/userBeers', async (_, thunkAPI: any) => {
+export const userBeers = createAsyncThunk('beers/userBeers', async(params: {page: number, limit: number}, thunkAPI: any) => {
     try {
         const token = thunkAPI.getState().auth.user.token;
-        return await beerService.userBeers(token);
+        return await beerService.userBeers(params.page, params.limit, token);
     } catch (error: any) {
         const message = (error.response && error.respone.data && error.response.data.message) || error.message || error.toString();
         return thunkAPI.rejectWithValue(message);
@@ -76,7 +84,7 @@ export const beerSlice = createSlice({
             .addCase(createBeer.fulfilled, (state: BeersStateInterface, action) => {
                 state.isLoading = false;
                 state.isSuccess = true;
-                state.beers.push(action.payload);
+                state.results.push(action.payload);
             })
             .addCase(createBeer.rejected, (state: BeersStateInterface, action) => {
                 state.isLoading = false;
@@ -90,7 +98,11 @@ export const beerSlice = createSlice({
             .addCase(getBeers.fulfilled, (state: BeersStateInterface, action) => {
                 state.isLoading = false;
                 state.isSuccess = true;
-                state.beers = action.payload.results;
+                state.currentPage = action.payload.currentPage;
+                state.itemCount = action.payload.itemCount;
+                state.pageCount = action.payload.pageCount;
+                state.limitPerPage = action.payload.limitPerPage;
+                state.results = action.payload.results;
             })
             .addCase(getBeers.rejected, (state: BeersStateInterface, action) => {
                 state.isLoading = false;
@@ -104,7 +116,11 @@ export const beerSlice = createSlice({
             .addCase(userBeers.fulfilled, (state: BeersStateInterface, action) => {
                 state.isLoading = false;
                 state.isSuccess = true;
-                state.beers = action.payload.results;
+                state.currentPage = action.payload.currentPage;
+                state.itemCount = action.payload.itemCount;
+                state.pageCount = action.payload.pageCount;
+                state.limitPerPage = action.payload.limitPerPage;
+                state.results = action.payload.results;
             })
             .addCase(userBeers.rejected, (state: BeersStateInterface, action) => {
                 state.isLoading = false;
@@ -118,7 +134,7 @@ export const beerSlice = createSlice({
             .addCase(deleteBeer.fulfilled, (state: BeersStateInterface, action) => {
                 state.isLoading = false;
                 state.isSuccess = true;
-                state.beers = state.beers.filter((beer: BeerEntity) => beer._id !== action.payload.id);
+                state.results = state.results.filter((beer: BeerEntity) => beer._id !== action.payload.id);
             })
             .addCase(deleteBeer.rejected, (state: BeersStateInterface, action) => {
                 state.isLoading = false;
