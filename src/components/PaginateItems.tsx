@@ -38,24 +38,37 @@ export const PaginateItems = (props: {
       </button>
 
       <button
-        className="paginate-item"
+        className={`paginate-item ${page === 1 ? "active" : ""}`}
         disabled={page === 1 || pageCount === 0}
         onClick={firstPage}
       >
         1
       </button>
 
-      {page !== 1 && page !== pageCount ? (
-        <button
-            className="paginate-item"
-            disabled
-        >
-            {page}
+      {page > 3 && <span>...</span>}
+
+      {page > 2 && (
+        <button className="paginate-item" onClick={previousPage}>
+          {page - 1}
         </button>
-      ) : null }
+      )}
+
+      {page !== 1 && page !== pageCount && (
+        <button className="paginate-item active" disabled>
+          {page}
+        </button>
+      )}
+
+      {page < pageCount - 1 && (
+        <button className="paginate-item" onClick={nextPage}>
+          {page + 1}
+        </button>
+      )}
+
+      {page < pageCount - 2 && <span>...</span>}
 
       <button
-        className="paginate-item"
+        className={`paginate-item ${page === pageCount ? "active" : ""}`}
         disabled={page === pageCount || pageCount === 0}
         onClick={lastPage}
       >

@@ -124,13 +124,27 @@ span .percentages {
 }
 
 .paginate-item {
-    border: 2px solid orange;
-    font-size: 14px;
-    font-weight: bold;
-    padding: 3px;
+    font-style: Calibri, sans-serif;
+    color: rgb(49, 46, 46);
+    font-size: 1.3rem;
+    border-radius: 8px;
+    border: none;
+    width: 3vw;
+    height: 3vw;  
     margin: 2px;
     cursor: pointer;
-    background-color: yellow;
+    background: none;
+
+}
+
+.paginate-item:hover {
+    border: 1px solid orange;
+    opacity: 0.5;
+    background-color: #e9e0e0;
+}
+
+.paginate-item.active {
+    border: 1px solid black;
 }
 
 .form,
