@@ -1,4 +1,4 @@
-import { SyntheticEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Spinner } from "../components/Spinner";
@@ -6,6 +6,7 @@ import { userBeers, reset } from "../features/beers/beerSlice";
 import { BeerItem } from "../components/BeerItem";
 import { AppDispatch, RootState } from "src/app/store";
 import { BeerEntity } from "types";
+import { PaginateItems } from "../components/PaginateItems";
 
 export function UserBeers() {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ export function UserBeers() {
   const [limitPerPage] = useSearchParams();
 
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(5);
+  const [limit] = useState(2);
 
   useEffect(() => {
     if (isError) {
@@ -34,8 +35,8 @@ export function UserBeers() {
 
     dispatch(
       userBeers({
-        page: Number(currentPage.get("page")) || 1,
-        limit: Number(limitPerPage.get("limit") || 5),
+        page: Number(currentPage.get("page")) || page,
+        limit: Number(limitPerPage.get("limit") || limit),
       })
     );
 
@@ -58,25 +59,6 @@ export function UserBeers() {
     return <Spinner />;
   }
 
-  const nextPage = (e: SyntheticEvent) => {
-    e.preventDefault();
-    setPage(Number(page + 1));
-  };
-  const previousPage = (e: SyntheticEvent) => {
-    e.preventDefault();
-    setPage(Number(page - 1));
-  };
-
-  const firstPage = (e: SyntheticEvent) => {
-    e.preventDefault();
-    setPage(Number(1));
-  };
-
-  const lastPage = (e: SyntheticEvent) => {
-    e.preventDefault();
-    setPage(Number(pageCount));
-  };
-
   return (
     <>
       <section className="heading">
@@ -85,7 +67,9 @@ export function UserBeers() {
         <p>Your beers</p>
 
         <section className="content">
-          {results?.length > 0 ? (
+          {Number(currentPage.get("page")) > pageCount ? (
+            <h3>No more beers and pages.</h3>
+          ) : results?.length > 0 ? (
             <div className="beers">
               {results?.map((beer: BeerEntity) => (
                 <BeerItem key={beer._id + ""} {...beer} />
@@ -96,20 +80,9 @@ export function UserBeers() {
           )}
         </section>
       </section>
-      <button disabled={page === 1 || pageCount === 0} onClick={firstPage}>
-        First page
-      </button>
-      <button disabled={page <= 1} onClick={previousPage}>
-        Previous page
-      </button>
-
-      <button disabled={page >= pageCount} onClick={nextPage}>
-        Next page
-      </button>
-
-      <button disabled={page === pageCount || pageCount === 0} onClick={lastPage}>
-        Last page
-      </button>
+      {Number(currentPage.get("page")) < pageCount && (
+        <PaginateItems setPage={setPage} page={page} pageCount={pageCount} />
+      )}
     </>
   );
 }

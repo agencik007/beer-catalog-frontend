@@ -123,6 +123,16 @@ span .percentages {
     color: #828282;
 }
 
+.paginate-item {
+    border: 2px solid orange;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 3px;
+    margin: 2px;
+    cursor: pointer;
+    background-color: yellow;
+}
+
 .form,
 .content {
     max-width: 80%;

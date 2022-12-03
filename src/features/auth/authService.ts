@@ -58,7 +58,6 @@ export const logout = createAsyncThunk('auth/logout', async(userId: string) => {
             }
         }
         await axios.post(API_URL + 'logout', {}, config)
-        localStorage.removeItem('user');
     }
 })
 

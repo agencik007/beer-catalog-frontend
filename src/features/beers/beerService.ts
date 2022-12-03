@@ -4,6 +4,7 @@ import {apiUrl} from "../../config/api";
 
 const API_URL = apiUrl + '/api/beers';
 
+
 // Create new beer
 export const createBeer = async (beer: BeerEntity, token: Partial<UserEntity>) => {
     const config = {
@@ -12,9 +13,13 @@ export const createBeer = async (beer: BeerEntity, token: Partial<UserEntity>) =
         }
     }
 
-    const response = await axios.post(API_URL, beer, config);
+    try {
+        const response = await axios.post(API_URL, beer, config);
 
-    return response.data;
+        return response.data;
+    } catch (error: any) {
+        window.location.href = '/';
+    }
 }
 
 // Get all beers
@@ -43,9 +48,14 @@ export const userBeers = async (currentPage: number, limitPerPage: number, token
         }
     }
 
-    const response = await axios.get(API_URL + `/userbeers?page=${params.page}&limit=${params.limit}`, config);
+    try {
+        const response = await axios.get(API_URL + `/userbeers?page=${params.page}&limit=${params.limit}`, config);
+
+        return response.data;
+    } catch (error: any) {
+        window.location.href = '/';
+    }
     
-    return response.data;
 }
 
 // Delete user beer
@@ -56,9 +66,13 @@ export const deleteBeer = async (beerId: string, token: Partial<UserEntity>) => 
         }
     }
 
-    const response = await axios.delete(API_URL + beerId, config);
+    try {
+        const response = await axios.delete(API_URL + "/" + beerId, config);
 
-    return response.data;
+        return response.data;
+    } catch (error: any) {
+        window.location.href = '/';
+    }
 }
 
 export const beerService = {

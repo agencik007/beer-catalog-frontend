@@ -1,4 +1,4 @@
-import React from "react";
+import React, { SyntheticEvent } from "react";
 import {FaSignInAlt, FaSignOutAlt} from 'react-icons/fa';
 import {IoIosBeer} from 'react-icons/io';
 import {Link, useNavigate} from 'react-router-dom';
@@ -17,7 +17,8 @@ export const Header = () => {
     const onLogout = () => {
         dispatch(logout(user));
         dispatch(reset);
-        navigate('/')
+        localStorage.removeItem('user');
+        navigate('/');
         toast.info('Successfully logged out')
     }
 

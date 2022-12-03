@@ -45,7 +45,7 @@ const authSlice = createSlice({
             .addCase(register.rejected, (state: AuthUserInterface, action) => {
                 state.isLoading = false;
                 state.isError = true;
-                state.message = action.payload;
+                state.message = action.error.message;
                 state.user = null;
             })
             .addCase(login.pending, (state: AuthUserInterface) => {
@@ -59,7 +59,7 @@ const authSlice = createSlice({
             .addCase(login.rejected, (state: AuthUserInterface, action) => {
                 state.isLoading = false;
                 state.isError = true;
-                state.message = action.payload;
+                state.message = action.error.message;
                 state.user = null;
             })
             .addCase(logout.fulfilled, (state: AuthUserInterface) => {
