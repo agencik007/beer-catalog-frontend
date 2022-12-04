@@ -126,11 +126,11 @@ span .percentages {
 .paginate-item {
     font-style: Calibri, sans-serif;
     color: rgb(49, 46, 46);
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     border-radius: 8px;
     border: none;
-    width: 3vw;
-    height: 3vw;  
+    width: 25px;
+    height: 35px;
     margin: 2px;
     cursor: pointer;
     background: none;
@@ -144,6 +144,7 @@ span .percentages {
 }
 
 .paginate-item.active {
+    background-color: orange;
     border: 1px solid black;
 }
 
