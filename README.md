@@ -4,7 +4,7 @@ You can check it out on [World of beers](https://beercatalog.networkmanager.pl/)
 
 I divided the project into
 [Frontend](https://github.com/agencik007/beer-catalog-frontend) and
-[Backend](https://github.com/agencik007/beer-catalog-backend)
+[Backend](https://github.com/agencik007/beer-catalog-backend).
 
 In the future, I will be fixing bugs and adding new functionalities such as:
 - waiting room
