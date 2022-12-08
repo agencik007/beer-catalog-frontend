@@ -2,11 +2,6 @@
 Hello and welcome to my very first big project.
 You can check it out on [World of beers](https://beercatalog.networkmanager.pl/) website. 
 
-Project is based on [MERN tutorial](https://github.com/bradtraversy/mern-tutorial) by Brad Traversy.
-I wanted to learn redux-toolkit.
-
-
-
 I divided the project into
 [Frontend](https://github.com/agencik007/beer-catalog-frontend) and
 [Backend](https://github.com/agencik007/beer-catalog-backend)
@@ -15,14 +10,14 @@ Is not finished due to the limited amount of time (one month). Due to lack of ti
 - comments
 - rating system
 - admin panel
-- pagination
 - searching
 - editing beers
 
 Right now you can:
 - see all beers added by registered users
-- create your own account secured by password hashing in the MongoDB database
-- log in and create, delete your own beer
+- create your own account stored in MongoDB database and secured by password hashing
+- create, delete your favourite bear
+- use pagination
 
 # Configuration
 To run this project on your computer you need to follow these steps:
@@ -39,12 +34,11 @@ To run this project on your computer you need to follow these steps:
    JWT_SECRET = TYPE YOUR SECRET CODE
    
    PORT = 5000
-3. MongoDB URI is stored in you mongodb connect tab. You can also specify 'beer-catalog' collection like this: 
+   
+3. MongoDB URI is stored in your MongoDB connect tab. You can also specify 'beer-catalog' collection like this: 
    'mongodb+srv://admin:password@cluster0.deo9b.mongodb.net/beer-catalog?retryWrites=true&w=majority'
    <a href="https://ibb.co/4p94yBp"><img src="https://i.ibb.co/njZQ2hj/mongo-uri.png" alt="mongo-uri" border="0"></a> 
-4. After entering ADMIN_EMAIL you can create your account on the website with this address and be able to delete all 
-   beer 
-   records.
+4. Add ADMIN_EMAIL and you will be able to create Admin account with permission to delete all beer records.
 5. Set a strong password in the JWT_SECRET field.
 6. In frontend folder you have to check tsconfig.paths.json file and type correct directory for types in backend 
    folder. 
