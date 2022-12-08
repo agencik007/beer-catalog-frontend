@@ -5,7 +5,8 @@ You can check it out on [World of beers](https://beercatalog.networkmanager.pl/)
 I divided the project into
 [Frontend](https://github.com/agencik007/beer-catalog-frontend) and
 [Backend](https://github.com/agencik007/beer-catalog-backend)
-Is not finished due to the limited amount of time (one month). Due to lack of time, I did not type everything properly in typescript, which is why you often see @ts-ignore and any type in code. In the future, I will be fixing it and adding new functionalities such as:
+
+In the future, I will be fixing bugs and adding new functionalities such as:
 - waiting room
 - comments
 - rating system
@@ -16,7 +17,7 @@ Is not finished due to the limited amount of time (one month). Due to lack of ti
 Right now you can:
 - see all beers added by registered users
 - create your own account stored in MongoDB database and secured by password hashing
-- create, delete your favourite bear
+- create, delete your favourite beer
 - use pagination
 
 # Configuration
