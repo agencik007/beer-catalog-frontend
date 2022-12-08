@@ -6,7 +6,7 @@ import {toast} from 'react-toastify';
 import {reset} from '../features/auth/authSlice';
 import {register} from '../features/auth/authService';
 import {Spinner} from '../components/Spinner';
-import { AppDispatch } from "src/app/store";
+import { AppDispatch, RootState } from "src/app/store";
 
 export function Register() {
     const [formData, setFormData] = useState({
@@ -21,11 +21,11 @@ export function Register() {
     const navigate = useNavigate();
     const dispatch: AppDispatch = useDispatch();
 
-    const {user, isLoading, isError, isSuccess, message} = useSelector((state: any) => state.auth);
+    const {user, isLoading, isError, isSuccess, message} = useSelector((state: RootState) => state.auth);
 
     useEffect(() => {
         if (isError) {
-            toast.error(message);
+            console.log(message);
         }
 
         if (isSuccess || user) {
@@ -56,8 +56,6 @@ export function Register() {
                 email,
                 password
             }
-
-            toast.success('Successfully registered!');
 
             dispatch(register(userData));
         }

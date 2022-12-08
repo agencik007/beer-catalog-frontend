@@ -13,6 +13,7 @@ export const register = createAsyncThunk('auth/register', async (userData: UserE
 
         if (response.status === 201) {
             localStorage.setItem('user', JSON.stringify(response.data));
+            toast.success('Successfully registered!');
             return response.data;
         }
 
@@ -21,6 +22,7 @@ export const register = createAsyncThunk('auth/register', async (userData: UserE
             toast.error(error.response.data.message);
             return rejectWithValue(error.response.data.message)
         } else {
+            toast.error(error.message);
             return rejectWithValue(error.message)
         }
     }
@@ -33,15 +35,16 @@ export const login = createAsyncThunk('auth/login', async (user: UserEntity, {re
 
         if (response.status === 200) {
             localStorage.setItem('user', JSON.stringify(response.data));
-            toast.success('Successfully logged in.')
-
+            toast.success('Successfully logged in.');
             return response.data;
         }
 
     } catch (error: any) {
         if (error.response && error.response.data.message) {
+            toast.error(error.response.data.message);
             return rejectWithValue(error.response.data.message)
         } else {
+            toast.error(error.message);
             return rejectWithValue(error.message)
         }
     }

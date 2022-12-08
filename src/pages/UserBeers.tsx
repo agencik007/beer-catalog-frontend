@@ -22,7 +22,7 @@ export function UserBeers() {
   const [limitPerPage] = useSearchParams();
 
   const [page, setPage] = useState(1);
-  const [limit] = useState(2);
+  const [limit] = useState(5);
 
   useEffect(() => {
     if (isError) {
