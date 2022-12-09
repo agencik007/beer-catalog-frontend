@@ -1,25 +1,22 @@
-import React, { SyntheticEvent } from "react";
+import React from "react";
 import {FaSignInAlt, FaSignOutAlt} from 'react-icons/fa';
 import {IoIosBeer} from 'react-icons/io';
 import {Link, useNavigate} from 'react-router-dom';
 import {useSelector, useDispatch} from "react-redux";
 import {reset} from "../features/auth/authSlice";
 import {logout} from "../features/auth/authService";
-import { AppDispatch } from "src/app/store";
-import { toast } from "react-toastify";
+import { AppDispatch, RootState } from "src/app/store";
 
 export const Header = () => {
     const navigate = useNavigate();
     const dispatch: AppDispatch = useDispatch();
 
-    const {user} = useSelector((state: any) => state.auth);
+    const {user} = useSelector((state: RootState) => state.auth);
 
     const onLogout = () => {
-        dispatch(logout(user));
+        dispatch(logout(user as unknown as string));
         dispatch(reset);
-        localStorage.removeItem('user');
         navigate('/');
-        toast.info('Successfully logged out')
     }
 
     function toCreateBeerForm() {
