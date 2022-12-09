@@ -1,7 +1,7 @@
 import React, { ChangeEvent, SyntheticEvent } from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { createBeer } from "../features/beers/beerSlice";
+import { createBeer, getBeers } from "../features/beers/beerSlice";
 import { BeerEntity } from "types";
 import { toast } from "react-toastify";
 import { AppDispatch } from "src/app/store";
@@ -35,7 +35,14 @@ export function CreateBeerForm() {
   const onSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
 
-    dispatch(createBeer(data));
+    dispatch(createBeer(data)).then(() =>
+      dispatch(
+        getBeers({
+          page: 1,
+          limit: 5,
+        })
+      )
+    );
 
     navigate("/");
 
@@ -82,7 +89,7 @@ export function CreateBeerForm() {
 
           <label>
             <small>Rate this beer from 1 to 5</small>
-            <Rating initialValue={1} onClick={(e) => data.rating = e}/>
+            <Rating initialValue={1} onClick={(e) => (data.rating = e)} />
           </label>
 
           <label>
