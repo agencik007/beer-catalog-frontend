@@ -2,9 +2,22 @@
 Hello and welcome to my very first big project.
 You can check it out on [World of beers](https://beercatalog.networkmanager.pl/) website. 
 
-I divided the project into
-[Frontend](https://github.com/agencik007/beer-catalog-frontend) and
-[Backend](https://github.com/agencik007/beer-catalog-backend).
+I divided the project into:
+ - [Frontend](https://github.com/agencik007/beer-catalog-frontend)
+ - [Backend](https://github.com/agencik007/beer-catalog-backend)
+
+## Tech
+
+- [Typescript]
+- [React] 
+- [Redux-tooltkit]
+- [Express.js]
+- [MongoDB]
+- [Mongoose]
+- [Jsonwebtoken]
+- [Axios]
+
+## Info 
 
 In the future, I will be fixing bugs and adding new functionalities such as:
 - waiting room
@@ -20,7 +33,7 @@ Right now you can:
 - create, delete your favourite beer
 - use pagination
 
-# Configuration
+## Configuration
 To run this project on your computer you need to follow these steps:
 1. Create a database in MongoDB and a beer-catalog collection where users and beers will be recorded. It is simple 
    to do, you can use the online version of MongoDB Atlas without installing any software. It should looks like this: <a href="https://imgbb.com/"><img src="https://i.ibb.co/0hmyvfh/mongodb-collection.png" alt="mongodb-collection" border="0"></a>
