@@ -107,12 +107,12 @@ export const beerSlice = createSlice({
       .addCase(createBeer.fulfilled, (state: BeersStateInterface, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.results.push(action.payload);
+        // state.results.push(action.payload)
       })
       .addCase(createBeer.rejected, (state: BeersStateInterface, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.message = action.error.message;
+        state.message = action.payload;
       })
       .addCase(getBeers.pending, (state: BeersStateInterface) => {
         state.isLoading = true;
@@ -154,9 +154,9 @@ export const beerSlice = createSlice({
       .addCase(deleteBeer.fulfilled, (state: BeersStateInterface, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.results = state.results.filter(
-          (beer: BeerEntity) => beer._id !== action.payload.id
-        );
+        // state.results = state.results.filter(
+        //   (beer: BeerEntity) => beer._id !== action.payload.id
+        // );
       })
       .addCase(deleteBeer.rejected, (state: BeersStateInterface, action) => {
         state.isLoading = false;
