@@ -11,10 +11,10 @@ import { Rating } from "react-simple-star-rating";
 import "../index.css";
 
 export function CreateBeerForm() {
-  const [text, setText] = useState({
+  const [data, setData] = useState({
     name: "",
     type: "",
-    rating: 0,
+    rating: 1,
     description: "",
     alcohol: 0,
     avatar: "",
@@ -24,7 +24,7 @@ export function CreateBeerForm() {
   const navigate = useNavigate();
 
   const onChange = (e: ChangeEvent) => {
-    setText((prevState: any) => ({
+    setData((prevState: any) => ({
       ...prevState,
       [(e.target as HTMLTextAreaElement).name]: (
         e.target as HTMLTextAreaElement
@@ -35,7 +35,7 @@ export function CreateBeerForm() {
   const onSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
 
-    dispatch(createBeer(text));
+    dispatch(createBeer(data));
 
     navigate("/");
 
@@ -55,7 +55,7 @@ export function CreateBeerForm() {
               id="name"
               required={true}
               placeholder="Name of beer..."
-              value={text.name}
+              value={data.name}
               onChange={onChange}
             />
           </label>
@@ -64,7 +64,7 @@ export function CreateBeerForm() {
             <select
               name="type"
               id="type"
-              value={text.type}
+              value={data.type}
               required={true}
               onChange={onChange}
             >
@@ -82,7 +82,7 @@ export function CreateBeerForm() {
 
           <label>
             <small>Rate this beer from 1 to 5</small>
-            <Rating initialValue={5} onClick={(e) => text.rating = e}/>
+            <Rating initialValue={1} onClick={(e) => data.rating = e}/>
           </label>
 
           <label>
@@ -93,7 +93,7 @@ export function CreateBeerForm() {
               required={true}
               placeholder="Please type some description..."
               maxLength={200}
-              value={text.description}
+              value={data.description}
               onChange={onChange}
             />
           </label>
@@ -107,7 +107,7 @@ export function CreateBeerForm() {
                 min={0.1}
                 max={100}
                 step={0.1}
-                value={text.alcohol}
+                value={data.alcohol}
                 onChange={onChange}
               />
               <span className="percentages"> %</span>
@@ -121,7 +121,7 @@ export function CreateBeerForm() {
               type="text"
               name="avatar"
               id="avatar"
-              value={text.avatar}
+              value={data.avatar}
               onChange={onChange}
             />
           </label>
