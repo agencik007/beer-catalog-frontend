@@ -1,6 +1,6 @@
 import { SyntheticEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteBeer, getBeers } from "../features/beers/beerSlice";
+import { deleteBeer, getBeers, userBeers } from "../features/beers/beerSlice";
 import { toast } from "react-toastify";
 import { AppDispatch, RootState } from "src/app/store";
 import { Rating } from 'react-simple-star-rating'
@@ -17,12 +17,18 @@ export const BeerItem = (beer: BeerEntity) => {
   );
 
   const onSubmit = (e: SyntheticEvent) => {
-    e.preventDefault();
 
-    dispatch(deleteBeer(beer._id as unknown as string)).then(() => dispatch(getBeers({
-      page: currentPage,
-      limit: limitPerPage,
-    })));
+    if (window.location.href.endsWith('user')){
+      dispatch(deleteBeer(beer._id as unknown as string)).then(() => dispatch(userBeers({
+        page: currentPage,
+        limit: limitPerPage,
+      })));
+    } else {
+      dispatch(deleteBeer(beer._id as unknown as string)).then(() => dispatch(getBeers({
+        page: currentPage,
+        limit: limitPerPage,
+      })));
+    }
 
     toast.success("Successfully deleted.");
   };
