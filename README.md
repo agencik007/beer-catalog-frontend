@@ -20,9 +20,11 @@ I divided the project into:
 ## Info 
 
 In the future, I will be fixing bugs and adding new functionalities such as:
+- send verification email after register
+- reset password
 - waiting room
 - comments
-- rating system
+- rating system for all users
 - admin panel
 - searching
 - editing beers
@@ -30,7 +32,8 @@ In the future, I will be fixing bugs and adding new functionalities such as:
 Right now you can:
 - see all beers added by registered users
 - create your own account stored in MongoDB database and secured by password hashing
-- create, delete your favourite beer
+- create beer with properties: name, type, rating, description, percentage of alcohol in beer, address with png image
+- delete your beer from page and database
 - use pagination
 
 ## Configuration
