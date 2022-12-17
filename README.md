@@ -1,64 +1,70 @@
 # Author information
+
 Hello and welcome to my very first big project.
-You can check it out on [World of beers](https://beercatalog.networkmanager.pl/) website. 
+You can check it out on [World of beers](https://beercatalog.networkmanager.pl/) website.
 
 I divided the project into:
- - [Frontend](https://github.com/agencik007/beer-catalog-frontend)
- - [Backend](https://github.com/agencik007/beer-catalog-backend)
+
+-   [Frontend](https://github.com/agencik007/beer-catalog-frontend)
+-   [Backend](https://github.com/agencik007/beer-catalog-backend)
 
 ## Tech
 
-- [Typescript]
-- [React] 
-- [Redux-tooltkit]
-- [Express.js]
-- [MongoDB]
-- [Mongoose]
-- [Jsonwebtoken]
-- [Axios]
+-   [Typescript]
+-   [React]
+-   [Redux-tooltkit]
+-   [Express.js]
+-   [MongoDB]
+-   [Mongoose]
+-   [Jsonwebtoken]
+-   [Axios]
 
-## Info 
+## Info
 
 In the future, I will be fixing bugs and adding new functionalities such as:
-- send verification email after register
-- reset password
-- waiting room
-- comments
-- rating system for all users
-- admin panel
-- searching
-- editing beers
+
+-   send verification email after register
+-   reset password
+-   waiting room for admin acceptation
+-   comments
+-   rating system for all users
+-   admin panel
+-   searching
+-   editing beers
 
 Right now you can:
-- see all beers added by registered users
-- create your own account stored in MongoDB database and secured by password hashing
-- create beer with properties: name, type, rating, description, percentage of alcohol in beer, address with png image
-- delete your beer from page and database
-- use pagination
+
+-   see all beers added by registered users
+-   create your own account stored in MongoDB database and secured by password hashing
+-   create beer with properties: name, type, rating, description, percentage of alcohol in beer, address with png image
+-   delete your beer from page and database
+-   use pagination
 
 ## Configuration
+
 To run this project on your computer you need to follow these steps:
-1. Create a database in MongoDB and a beer-catalog collection where users and beers will be recorded. It is simple 
+
+1. Create a database in MongoDB and a beer-catalog collection where users and beers will be recorded. It is simple
    to do, you can use the online version of MongoDB Atlas without installing any software. It should looks like this: <a href="https://imgbb.com/"><img src="https://i.ibb.co/0hmyvfh/mongodb-collection.png" alt="mongodb-collection" border="0"></a>
-2. Set the file .env in backend folder and type your credentials. 
+2. Set the file .env in backend folder and type your credentials.
 
-   NODE_ENV = development
+    NODE_ENV = development
 
-   MONGO_URI = PUT YOUR CONNECTION URI TO MONGODB
+    MONGO_URI = PUT YOUR CONNECTION URI TO MONGODB
 
-   ADMIN_EMAIL = TYPE YOUR EMAIL
+    ADMIN_EMAIL = TYPE YOUR EMAIL
 
-   JWT_SECRET = TYPE YOUR SECRET CODE
-   
-   PORT = 5000
-   
-3. MongoDB URI is stored in your MongoDB connect tab. You can also specify 'beer-catalog' collection like this: 
+    JWT_SECRET = TYPE YOUR SECRET CODE
+
+    PORT = 5000
+
+3. MongoDB URI is stored in your MongoDB connect tab. You can also specify 'beer-catalog' collection like this:
    'mongodb+srv://admin:password@cluster0.deo9b.mongodb.net/beer-catalog?retryWrites=true&w=majority'
-   <a href="https://ibb.co/4p94yBp"><img src="https://i.ibb.co/njZQ2hj/mongo-uri.png" alt="mongo-uri" border="0"></a> 
+   <a href="https://ibb.co/4p94yBp"><img src="https://i.ibb.co/njZQ2hj/mongo-uri.png" alt="mongo-uri" border="0"></a>
 4. Add ADMIN_EMAIL and you will be able to create Admin account with permission to delete all beer records.
 5. Set a strong password in the JWT_SECRET field.
-6. In frontend folder you have to check tsconfig.paths.json file and type correct directory for types in backend 
-   folder. 
+6. In frontend folder you have to check tsconfig.paths.json file and type correct directory for types in backend
+   folder.
 
 Thats all. You can see how it works by run backend with start:dev script and frontend with start script. Enjoy :)
 

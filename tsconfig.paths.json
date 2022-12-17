@@ -1,10 +1,8 @@
 {
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "types": [
-        "../beer-catalog-backend/types"
-      ]
-    }
-  }
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"types": ["../beer-catalog-backend/types"]
+		}
+	}
 }
