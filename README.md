@@ -68,6 +68,12 @@ To run this project on your computer you need to follow these steps:
 
 Thats all. You can see how it works by run backend with start:dev script and frontend with start script. Enjoy :)
 
+## Environment
+
+- Set `VITE_API_URL` to your backend base URL (e.g. `https://your-render-api.example.com`).  
+  If not set, the app falls back to `http://localhost:5000` for local development.
+  On Vercel, add this variable in Project Settings → Environment Variables.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) TS template.

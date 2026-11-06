@@ -1,2 +1,1 @@
-export const apiUrl = 'http://localhost:5000';
-// export const apiUrl = 'https://beercatalog.networkmanager.pl';
+export const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
