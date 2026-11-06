@@ -7,7 +7,7 @@ import { Rating } from 'react-simple-star-rating';
 import { BeerEntity } from 'types';
 
 import './BeerItem.css';
-const BeerImage = require('../assets/images/beer.png');
+import BeerImage from '../assets/images/beer.png';
 
 export const BeerItem = (beer: BeerEntity) => {
 	const dispatch: AppDispatch = useDispatch();
