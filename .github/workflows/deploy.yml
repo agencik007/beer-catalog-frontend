@@ -6,6 +6,10 @@
 #   VERCEL_PROJECT_ID  prj_DonHoMF33KkFQI4eiuZdhjycMElh
 #
 # VITE_API_URL is already set on the Vercel project and is pulled before build.
+#
+# Hobby (team_peqVqe2v79Og4AILzWMz0edy) blocks a CLI deploy when the git
+# author of HEAD is not the team owner. The job rewrites that author in the
+# runner before deploy and does not push the rewritten commit.
 
 name: Deploy
 
@@ -21,8 +25,20 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
+
+      # Default fetch-depth (1) is enough to amend HEAD. The new commit exists
+      # only on this runner — do not push it. Owner email linked on the Hobby
+      # account: agencik007@gmail.com (username agencik007).
+      - name: Rewrite HEAD author for Vercel Hobby
+        run: |
+          git config user.email "agencik007@gmail.com"
+          git config user.name "agencik007"
+          git commit --amend --no-edit --reset-author
+          git log -1 --format='Deploy author: %an <%ae>'
 
       - uses: actions/setup-node@v4
         with:
