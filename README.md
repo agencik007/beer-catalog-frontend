@@ -63,10 +63,17 @@ To run this project on your computer you need to follow these steps:
    <a href="https://ibb.co/4p94yBp"><img src="https://i.ibb.co/njZQ2hj/mongo-uri.png" alt="mongo-uri" border="0"></a>
 4. Add ADMIN_EMAIL and you will be able to create Admin account with permission to delete all beer records.
 5. Set a strong password in the JWT_SECRET field.
-6. In frontend folder you have to check tsconfig.paths.json file and type correct directory for types in backend
-   folder.
+6. Shared entity types live in `src/types` (import them as `types`). The frontend builds on its own; a checkout of beer-catalog-backend is not required.
 
 Thats all. You can see how it works by run backend with start:dev script and frontend with start script. Enjoy :)
+
+## CI / CD
+
+- `.github/workflows/ci.yml` runs on pull requests and pushes to `main`: Node 22, `npm ci`, `npm run build`, with `VITE_API_URL=https://beer-catalog-backend.onrender.com`.
+- `.github/workflows/deploy.yml` deploys to Vercel production on push to `main`. Add these repository secrets (do not commit a token):
+  - `VERCEL_TOKEN`
+  - `VERCEL_ORG_ID` = `team_peqVqe2v79Og4AILzWMz0edy`
+  - `VERCEL_PROJECT_ID` = `prj_DonHoMF33KkFQI4eiuZdhjycMElh`
 
 ## Environment
 

@@ -8,7 +8,7 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			src: path.resolve(__dirname, 'src'),
-			types: path.resolve(__dirname, '../beer-catalog-backend/types'),
+			types: path.resolve(__dirname, 'src/types'),
 		},
 	},
 	server: {
