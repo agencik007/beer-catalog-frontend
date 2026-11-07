@@ -1,0 +1,188 @@
+/* Wszystkie animacje poniżej zmieniają tylko transform/opacity (kompozytor, zero repaintów). */
+
+.beer-bg {
+	position: fixed;
+	inset: 0;
+	z-index: -1;
+	overflow: hidden;
+	pointer-events: none;
+	contain: strict;
+}
+
+/* ---------- Kropki-bąbelki w górnej części ekranu ---------- */
+.beer-bg__dots {
+	position: absolute;
+	inset: 0;
+	overflow: hidden;
+	opacity: 0.35;
+	mask-image: linear-gradient(#000 0%, transparent 72%);
+}
+
+.beer-bg__dots-layer {
+	position: absolute;
+	inset: 0 0 -420px;
+	background-image: radial-gradient(circle, rgba(255, 255, 255, 0.22) 1px, transparent 1.6px);
+	background-size: 42px 42px;
+	animation: beer-bg-dots 28s linear infinite;
+}
+
+/* ---------- Poświata nad kuflem ---------- */
+.beer-bg__ambient {
+	position: absolute;
+	inset: 0;
+	background: radial-gradient(ellipse 65% 42% at 50% 96%, rgba(255, 166, 30, 0.28), transparent 70%);
+}
+
+/* ---------- Kufel: fale + ciecz ---------- */
+.beer-bg__pint {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	height: 31vh;
+	height: 31svh;
+	min-height: 195px;
+}
+
+/* Statyczny blask nad pianą (zamiast drop-shadow na ruchomej warstwie). */
+.beer-bg__pint::before {
+	content: '';
+	position: absolute;
+	top: -56px;
+	right: 0;
+	left: 0;
+	height: 90px;
+	background: linear-gradient(180deg, transparent, rgba(255, 243, 210, 0.12) 70%, transparent);
+}
+
+/*
+ * Każda fala to jeden kafel SVG (1440×160) powtarzany w poziomie.
+ * Ścieżki zaczynają i kończą się na ekstremum z poziomą styczną, więc pętla jest bezszwowa.
+ */
+.beer-bg__wave {
+	position: absolute;
+	left: 0;
+	width: 200%;
+	height: 112px;
+	background-repeat: repeat-x;
+	background-size: 50% 100%;
+}
+
+.beer-bg__wave--back {
+	top: -32px;
+	z-index: 1;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 160' preserveAspectRatio='none'%3E%3Cpath fill='%23ffd670' fill-opacity='0.42' d='M0,36 C152,36 228,100 380,100 S608,30 760,30 S970,94 1110,94 S1308,36 1440,36 V160 H0 Z'/%3E%3C/svg%3E");
+	animation: beer-bg-wave 16s linear infinite reverse;
+}
+
+.beer-bg__wave--foam {
+	top: -24px;
+	z-index: 2;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 160' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23fffdf7'/%3E%3Cstop offset='.58' stop-color='%23faeccf'/%3E%3Cstop offset='1' stop-color='%23f3b647'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath fill='url(%23g)' d='M0,92 C132,92 198,40 330,40 S516,86 640,86 S868,34 1020,34 S1272,92 1440,92 V160 H0 Z'/%3E%3C/svg%3E");
+	animation: beer-bg-wave 11s linear infinite;
+}
+
+.beer-bg__wave--front {
+	top: -14px;
+	z-index: 3;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 160' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ffba26'/%3E%3Cstop offset='1' stop-color='%23df7208'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath fill='url(%23g)' d='M0,92 C120,92 180,128 300,128 S540,66 700,66 S916,124 1060,124 S1288,92 1440,92 V160 H0 Z'/%3E%3C/svg%3E");
+	animation: beer-bg-wave 8.5s linear infinite;
+}
+
+/* Ciecz leży POD falami i zaczyna się poniżej najgłębszej doliny przedniej fali,
+   a jej górny kolor (#df7208) jest taki sam jak dół przedniej fali, więc łączenie jest niewidoczne. */
+.beer-bg__liquid {
+	position: absolute;
+	top: 88px;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 0;
+	overflow: hidden;
+	background: linear-gradient(180deg, #df7208 0%, #c85a06 30%, #b84a05 55%, #591d04 100%);
+}
+
+.beer-bg__caustic {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(
+		105deg,
+		transparent 20%,
+		rgba(255, 240, 185, 0.16) 45%,
+		rgba(255, 210, 90, 0.26) 50%,
+		transparent 75%
+	);
+	animation: beer-bg-caustic 9s ease-in-out infinite alternate;
+}
+
+/* Bąbelek = pas o wysokości cieczy z kółkiem na dole; translateY(-100%) przenosi go
+   dokładnie pod taflę niezależnie od wysokości ekranu. */
+.beer-bg__bubble {
+	--size: 9px;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: var(--size);
+	background: radial-gradient(
+			circle at 32% 30%,
+			#fff,
+			rgba(255, 232, 168, 0.45) 60%,
+			rgba(255, 255, 255, 0.7) 66%,
+			transparent 72%
+		)
+		bottom / var(--size) var(--size) no-repeat;
+	opacity: 0;
+	animation: beer-bg-bubble 6.5s ease-in infinite;
+}
+
+.beer-bg__bubble:nth-child(2) { left: 12%; --size: 9px; animation-duration: 5.8s; animation-delay: -1.2s; }
+.beer-bg__bubble:nth-child(3) { left: 27%; --size: 6px; animation-duration: 7.2s; animation-delay: -3.4s; }
+.beer-bg__bubble:nth-child(4) { left: 44%; --size: 11px; animation-duration: 6.1s; animation-delay: -0.6s; }
+.beer-bg__bubble:nth-child(5) { left: 59%; --size: 7px; animation-duration: 8s; animation-delay: -4.8s; }
+.beer-bg__bubble:nth-child(6) { left: 74%; --size: 10px; animation-duration: 5.4s; animation-delay: -2.1s; }
+.beer-bg__bubble:nth-child(7) { left: 88%; --size: 12px; animation-duration: 4.6s; animation-delay: -1.7s; }
+.beer-bg__bubble:nth-child(8) { left: 93%; --size: 7px; animation-duration: 5.1s; animation-delay: -3.9s; }
+
+@keyframes beer-bg-dots {
+	to {
+		transform: translate3d(0, -420px, 0);
+	}
+}
+
+@keyframes beer-bg-wave {
+	to {
+		transform: translate3d(-50%, 0, 0);
+	}
+}
+
+@keyframes beer-bg-caustic {
+	from {
+		transform: translate3d(-18%, 0, 0);
+	}
+	to {
+		transform: translate3d(18%, 0, 0);
+	}
+}
+
+@keyframes beer-bg-bubble {
+	0% {
+		transform: translate3d(0, 0, 0);
+		opacity: 0;
+	}
+	18% {
+		opacity: 0.85;
+	}
+	82% {
+		opacity: 0.75;
+	}
+	100% {
+		transform: translate3d(-10px, -100%, 0);
+		opacity: 0;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.beer-bg__bubble {
+		display: none;
+	}
+}

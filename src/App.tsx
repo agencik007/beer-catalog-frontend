@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import { Header } from './components/Header';
+import { BeerBackground } from './components/BeerBackground';
 import { Main } from './pages/Main';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
@@ -25,6 +26,8 @@ function App() {
 
 	return (
 		<>
+			<BeerBackground />
+
 			<Router>
 				<div className="container">
 					<Header />
