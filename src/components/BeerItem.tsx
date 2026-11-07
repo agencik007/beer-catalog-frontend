@@ -1,5 +1,6 @@
 import { SyntheticEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link, useLocation } from 'react-router-dom';
 import { deleteBeer, getBeers, userBeers } from '../features/beers/beerSlice';
 import { toast } from 'react-toastify';
 import { AppDispatch, RootState } from 'src/app/store';
@@ -12,9 +13,24 @@ import BeerImage from '../assets/images/beer.png';
 export const BeerItem = (beer: BeerEntity) => {
 	const dispatch: AppDispatch = useDispatch();
 
+	const location = useLocation();
+
 	const { currentPage, limitPerPage } = useSelector(
 		(state: RootState) => state.beers
 	);
+
+	const beerId = beer._id ? String(beer._id) : '';
+	const detailState = {
+		from: location.pathname,
+		search: location.search,
+		page: currentPage > 0 ? currentPage : undefined,
+	};
+	const photo =
+		beer.avatar === '' ? (
+			<img src={BeerImage} className="image" alt="beer" />
+		) : (
+			<img src={beer.avatar} className="image" alt="beer" />
+		);
 
 	const onSubmit = (e: SyntheticEvent) => {
 		if (window.location.href.endsWith('user')) {
@@ -46,15 +62,31 @@ export const BeerItem = (beer: BeerEntity) => {
 	return (
 		<div className="card">
 			<div className="left">
-				{beer.avatar === '' ? (
-					<img src={BeerImage} className="image" alt="beer" />
+				{beerId ? (
+					<Link
+						to={`/beer/${beerId}`}
+						state={detailState}
+						className="image-link"
+					>
+						{photo}
+					</Link>
 				) : (
-					<img src={beer.avatar} className="image" alt="beer" />
+					photo
 				)}
 			</div>
 			<div className="right">
 				<div className="product-details">
-					<h1>{beer.name}</h1>
+					{beerId ? (
+						<Link
+							to={`/beer/${beerId}`}
+							state={detailState}
+							className="name-link"
+						>
+							<h1>{beer.name}</h1>
+						</Link>
+					) : (
+						<h1>{beer.name}</h1>
+					)}
 					<h2>{beer.type}</h2>
 					<p id="description">{beer.description}</p>
 					<strong className="alcohol">
