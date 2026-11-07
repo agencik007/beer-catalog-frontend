@@ -2,12 +2,17 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { beerService } from './beerService';
 import { BeerEntity } from 'types';
 
+type SelectedBeerStatus = 'idle' | 'loading' | 'ready' | 'notFound' | 'error';
+
 interface BeersStateInterface {
 	currentPage: number;
 	itemCount: number;
 	pageCount: number;
 	limitPerPage: number;
 	results: BeerEntity[];
+	selectedBeer: BeerEntity | null;
+	selectedBeerId: string | null;
+	selectedBeerStatus: SelectedBeerStatus;
 	isError: boolean;
 	isSuccess: boolean;
 	isLoading: boolean;
@@ -20,6 +25,9 @@ const initialState: BeersStateInterface = {
 	pageCount: 0,
 	limitPerPage: 0,
 	results: [],
+	selectedBeer: null,
+	selectedBeerId: null,
+	selectedBeerStatus: 'idle',
 	isError: false,
 	isSuccess: false,
 	isLoading: false,
@@ -41,6 +49,19 @@ export const createBeer = createAsyncThunk(
 				error.message ||
 				error.toString();
 			return thunkAPI.rejectWithValue(message);
+		}
+	}
+);
+
+// Get one beer
+export const getBeer = createAsyncThunk(
+	'beers/getOne',
+	async (id: string, thunkAPI) => {
+		try {
+			return await beerService.getBeer(id);
+		} catch (error: any) {
+			const status = error?.response?.status ?? 0;
+			return thunkAPI.rejectWithValue({ status });
 		}
 	}
 );
@@ -178,6 +199,37 @@ export const beerSlice = createSlice({
 					state.message = action.error.message;
 				}
 			)
+			.addCase(getBeer.pending, (state: BeersStateInterface, action) => {
+				state.selectedBeerStatus = 'loading';
+				state.selectedBeerId = action.meta.arg;
+				state.selectedBeer = null;
+			})
+			.addCase(getBeer.fulfilled, (state: BeersStateInterface, action) => {
+				if (state.selectedBeerId !== action.meta.arg) {
+					return;
+				}
+
+				const payload = action.payload;
+				if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
+					state.selectedBeer = null;
+					state.selectedBeerStatus = 'error';
+					return;
+				}
+
+				state.selectedBeer = payload;
+				state.selectedBeerStatus = 'ready';
+			})
+			.addCase(getBeer.rejected, (state: BeersStateInterface, action) => {
+				if (state.selectedBeerId !== action.meta.arg) {
+					return;
+				}
+
+				state.selectedBeer = null;
+				const status =
+					(action.payload as { status?: number } | undefined)?.status ?? 0;
+				state.selectedBeerStatus =
+					status === 404 || status === 400 ? 'notFound' : 'error';
+			})
 			.addCase(deleteBeer.pending, (state: BeersStateInterface) => {
 				state.isLoading = true;
 			})

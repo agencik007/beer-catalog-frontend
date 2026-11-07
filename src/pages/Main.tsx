@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Spinner } from '../components/Spinner';
 import { getBeers, reset } from '../features/beers/beerSlice';
@@ -9,7 +9,6 @@ import { BeerEntity } from 'types';
 import { PaginateItems } from '../components/PaginateItems';
 
 export function Main() {
-	const navigate = useNavigate();
 	const dispatch: AppDispatch = useDispatch();
 
 	const { user } = useSelector((state: RootState) => state.auth);
@@ -18,42 +17,29 @@ export function Main() {
 		(state: RootState) => state.beers
 	);
 
-	const [currentPage] = useSearchParams();
-	const [limitPerPage] = useSearchParams();
+	const [searchParams] = useSearchParams();
 
-	const [page, setPage] = useState(1);
-	const [limit] = useState(5);
+	const [page, setPage] = useState(
+		() => Number(searchParams.get('page')) || 1
+	);
+	const [limit] = useState(() => Number(searchParams.get('limit')) || 5);
 
 	useEffect(() => {
 		if (isError) {
 			console.log(message);
 		}
 
-		if (!user) {
-			navigate('/');
-		}
-
 		dispatch(
 			getBeers({
-				page: Number(currentPage.get('page')) || page,
-				limit: Number(limitPerPage.get('limit') || limit),
+				page,
+				limit,
 			})
 		);
 
 		return () => {
 			dispatch(reset());
 		};
-	}, [
-		user,
-		navigate,
-		currentPage,
-		limitPerPage,
-		page,
-		limit,
-		isError,
-		message,
-		dispatch,
-	]);
+	}, [page, limit, isError, message, dispatch]);
 
 	if (isLoading) {
 		return <Spinner />;
@@ -73,7 +59,7 @@ export function Main() {
 				<p>Beers list</p>
 
 				<section className="content">
-					{Number(currentPage.get('page')) > pageCount ? (
+					{page > pageCount && pageCount > 0 ? (
 						<h3>No more beers and pages.</h3>
 					) : results?.length > 0 ? (
 						<div className="beers">
@@ -86,7 +72,7 @@ export function Main() {
 					)}
 				</section>
 			</section>
-			{Number(currentPage.get('page')) < pageCount && (
+			{pageCount > 0 && page <= pageCount && (
 				<PaginateItems
 					setPage={setPage}
 					page={page}

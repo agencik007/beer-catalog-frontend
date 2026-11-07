@@ -24,6 +24,13 @@ export const createBeer = async (
 	}
 };
 
+// Get one public beer
+export const getBeer = async (id: string) => {
+	const response = await axios.get(API_URL + '/' + id);
+
+	return response.data;
+};
+
 // Get all beers
 export const getBeers = async (currentPage: number, limitPerPage: number) => {
 	const params = {
@@ -85,6 +92,7 @@ export const deleteBeer = async (
 
 export const beerService = {
 	createBeer,
+	getBeer,
 	getBeers,
 	userBeers,
 	deleteBeer,
