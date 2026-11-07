@@ -28,7 +28,7 @@ export const PaginateItems = (props: {
 	};
 
 	return (
-		<div>
+		<div className="pager">
 			<button
 				className="paginate-item"
 				disabled={page <= 1}
