@@ -1,11 +1,11 @@
 import React, { SyntheticEvent, useEffect, useState } from 'react';
-import { FaSignInAlt } from 'react-icons/fa';
+import { FaGithub, FaGoogle, FaSignInAlt } from 'react-icons/fa';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { reset } from '../features/auth/authSlice';
-import { login } from '../features/auth/authService';
+import { login, signInWithProvider } from '../features/auth/authService';
+import { oauthProviders } from '../lib/authClient';
 import { Spinner } from '../components/Spinner';
-import { UserEntity } from 'types';
 import { AppDispatch, RootState } from 'src/app/store';
 
 export function Login() {
@@ -47,12 +47,7 @@ export function Login() {
 	const onSubmit = (e: SyntheticEvent) => {
 		e.preventDefault();
 
-		const userData: UserEntity = {
-			email,
-			password,
-		};
-
-		dispatch(login(userData));
+		dispatch(login({ email, password }));
 	};
 
 	if (isLoading) {
@@ -99,6 +94,31 @@ export function Login() {
 							</button>
 						</div>
 					</form>
+					<p>
+						<Link to="/forgot-password">Forgot your password?</Link>
+					</p>
+					{oauthProviders.length > 0 && (
+						<div className="form-group">
+							{oauthProviders.includes('google') && (
+								<button
+									type="button"
+									className="btn btn-block"
+									onClick={() => signInWithProvider('google')}
+								>
+									<FaGoogle /> Continue with Google
+								</button>
+							)}
+							{oauthProviders.includes('github') && (
+								<button
+									type="button"
+									className="btn btn-block"
+									onClick={() => signInWithProvider('github')}
+								>
+									<FaGithub /> Continue with GitHub
+								</button>
+							)}
+						</div>
+					)}
 				</section>
 			</section>
 		</>

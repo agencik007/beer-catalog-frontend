@@ -14,8 +14,8 @@ export const Header = () => {
 	const { user } = useSelector((state: RootState) => state.auth);
 
 	const onLogout = () => {
-		dispatch(logout(user as unknown as string));
-		dispatch(reset);
+		dispatch(logout());
+		dispatch(reset());
 		navigate('/');
 	};
 

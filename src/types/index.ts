@@ -25,3 +25,13 @@ export interface UserEntity {
 	role?: 'user' | 'admin';
 	token?: string | null;
 }
+
+/** Signed-in user kept in Redux and localStorage; `token` is the Better Auth bearer token. */
+export interface AuthUser {
+	id: string;
+	_id: string;
+	name: string;
+	email: string;
+	role: 'user' | 'admin';
+	token: string;
+}

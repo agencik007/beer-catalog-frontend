@@ -30,8 +30,11 @@ export function Register() {
 			console.log(message);
 		}
 
-		if (isSuccess || user) {
+		if (user) {
 			navigate('/');
+		} else if (isSuccess) {
+			// Account created, waiting for email verification
+			navigate('/login');
 		}
 
 		dispatch(reset());
@@ -51,6 +54,8 @@ export function Register() {
 
 		if (password !== password2) {
 			toast.error('Passwords do not match.');
+		} else if (password.length < 8) {
+			toast.error('Password must have at least 8 characters.');
 		} else if (!name || !email) {
 			toast.error('Please enter your credentials.');
 		} else {
