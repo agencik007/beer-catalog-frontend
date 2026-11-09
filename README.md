@@ -44,12 +44,12 @@ To run this project on your computer you need to follow these steps:
 
 1. Create a database in MongoDB and a beer-catalog collection where users and beers will be recorded. It is simple
    to do, you can use the online version of MongoDB Atlas without installing any software. It should looks like this: <a href="https://imgbb.com/"><img src="https://i.ibb.co/0hmyvfh/mongodb-collection.png" alt="mongodb-collection" border="0"></a>
-2. Configure the backend `.env` as described in the backend README / `.env.example` (`MONGO_URI`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, optional `RESEND_API_KEY` and OAuth keys).
+2. Configure the backend `.env` as described in the backend README / `.env.example` (`MONGO_URI`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, optional `BREVO_API_KEY` + `EMAIL_FROM_ADDRESS` and OAuth keys).
 3. MongoDB URI is stored in your MongoDB connect tab. You can also specify 'beer-catalog' collection like this:
    'mongodb+srv://admin:password@cluster0.deo9b.mongodb.net/beer-catalog?retryWrites=true&w=majority'
    <a href="https://ibb.co/4p94yBp"><img src="https://i.ibb.co/njZQ2hj/mongo-uri.png" alt="mongo-uri" border="0"></a>
 4. Grant the admin role (permission to delete all beer records) with `npm run set-admin -- <email>` in the backend.
-5. Without `RESEND_API_KEY` the backend prints verification and reset links to its console in development.
+5. Without `BREVO_API_KEY` the backend prints verification and reset links to its console in development.
 6. Shared entity types live in `src/types` (import them as `types`). The frontend builds on its own; a checkout of beer-catalog-backend is not required.
 
 Thats all. You can see how it works by run backend with start:dev script and frontend with start script. Enjoy :)
