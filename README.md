@@ -16,15 +16,13 @@ I divided the project into:
 -   [Express.js]
 -   [MongoDB]
 -   [Mongoose]
--   [Jsonwebtoken]
+-   [Better Auth]
 -   [Axios]
 
 ## Info
 
 In the future, I will be fixing bugs and adding new functionalities such as:
 
--   send verification email after register
--   reset password
 -   waiting room for admin acceptation
 -   comments
 -   rating system for all users
@@ -35,7 +33,7 @@ In the future, I will be fixing bugs and adding new functionalities such as:
 Right now you can:
 
 -   see all beers added by registered users
--   create your own account stored in MongoDB database and secured by password hashing
+-   create your own account (email verification required), reset a forgotten password, or sign in with Google/GitHub
 -   create beer with properties: name, type, rating, description, percentage of alcohol in beer, address with png image
 -   delete your beer from page and database
 -   use pagination
@@ -46,23 +44,12 @@ To run this project on your computer you need to follow these steps:
 
 1. Create a database in MongoDB and a beer-catalog collection where users and beers will be recorded. It is simple
    to do, you can use the online version of MongoDB Atlas without installing any software. It should looks like this: <a href="https://imgbb.com/"><img src="https://i.ibb.co/0hmyvfh/mongodb-collection.png" alt="mongodb-collection" border="0"></a>
-2. Set the file .env in backend folder and type your credentials.
-
-    NODE_ENV = development
-
-    MONGO_URI = PUT YOUR CONNECTION URI TO MONGODB
-
-    ADMIN_EMAIL = TYPE YOUR EMAIL
-
-    JWT_SECRET = TYPE YOUR SECRET CODE
-
-    PORT = 5000
-
+2. Configure the backend `.env` as described in the backend README / `.env.example` (`MONGO_URI`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, optional `BREVO_API_KEY` + `EMAIL_FROM_ADDRESS` and OAuth keys).
 3. MongoDB URI is stored in your MongoDB connect tab. You can also specify 'beer-catalog' collection like this:
    'mongodb+srv://admin:password@cluster0.deo9b.mongodb.net/beer-catalog?retryWrites=true&w=majority'
    <a href="https://ibb.co/4p94yBp"><img src="https://i.ibb.co/njZQ2hj/mongo-uri.png" alt="mongo-uri" border="0"></a>
-4. Add ADMIN_EMAIL and you will be able to create Admin account with permission to delete all beer records.
-5. Set a strong password in the JWT_SECRET field.
+4. Grant the admin role (permission to delete all beer records) with `npm run set-admin -- <email>` in the backend.
+5. Without `BREVO_API_KEY` the backend prints verification and reset links to its console in development.
 6. Shared entity types live in `src/types` (import them as `types`). The frontend builds on its own; a checkout of beer-catalog-backend is not required.
 
 Thats all. You can see how it works by run backend with start:dev script and frontend with start script. Enjoy :)
@@ -80,6 +67,16 @@ Thats all. You can see how it works by run backend with start:dev script and fro
 - Set `VITE_API_URL` to your backend base URL (e.g. `https://your-render-api.example.com`).  
   If not set, the app falls back to `http://localhost:5000` for local development.
   On Vercel, add this variable in Project Settings → Environment Variables.
+- Set `VITE_AUTH_PROVIDERS` to a comma-separated list of OAuth providers enabled on the backend (`google`, `github`) to show their sign-in buttons. Leave it empty to hide them.
+- See `.env.example`.
+
+## Authentication
+
+Authentication uses [Better Auth](https://www.better-auth.com) (`src/lib/authClient.ts`). After sign-in the session token is stored in `localStorage` (`user.token`) and sent as `Authorization: Bearer <token>` to the API.
+
+- `/register`: creates the account and sends a verification email; the link lands on `/auth/callback`, which signs the user in.
+- `/login`: email + password, optional Google/GitHub buttons (OAuth also returns to `/auth/callback`).
+- `/forgot-password` and `/reset-password`: password reset by email.
 
 # Getting Started with Create React App
 
