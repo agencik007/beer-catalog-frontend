@@ -91,12 +91,15 @@ export const login = createAsyncThunk(
 	}
 );
 
-// Finish email verification / OAuth: the backend set a session cookie, exchange it for a bearer token
+// Finish email verification / OAuth. Prefer the token from the redirect fragment;
+// the session cookie lives on the API host and is not sent cross-site.
 export const completeAuthRedirect = createAsyncThunk(
 	'auth/completeRedirect',
-	async (_: void, { rejectWithValue }) => {
+	async (tokenFromRedirect: string | undefined, { rejectWithValue }) => {
 		const { data, error } = await authClient.getSession({
-			fetchOptions: { credentials: 'include' },
+			fetchOptions: tokenFromRedirect
+				? { ...bearer(tokenFromRedirect), credentials: 'include' }
+				: { credentials: 'include' },
 		});
 
 		if (error || !data) {
@@ -107,7 +110,10 @@ export const completeAuthRedirect = createAsyncThunk(
 			return rejectWithValue(message);
 		}
 
-		const authUser = toAuthUser(data.user as SessionUser, data.session.token);
+		const authUser = toAuthUser(
+			data.user as SessionUser,
+			tokenFromRedirect || data.session.token
+		);
 		storeUser(authUser);
 		toast.success(`Welcome, ${authUser.name}!`);
 		return authUser;

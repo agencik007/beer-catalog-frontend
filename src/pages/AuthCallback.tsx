@@ -28,7 +28,17 @@ export function AuthCallback() {
 		if (error || started.current) return;
 		started.current = true;
 
-		dispatch(completeAuthRedirect()).then((result) => {
+		const hash = new URLSearchParams(window.location.hash.slice(1));
+		const token = hash.get('token') ?? undefined;
+		if (token) {
+			window.history.replaceState(
+				null,
+				'',
+				window.location.pathname + window.location.search
+			);
+		}
+
+		dispatch(completeAuthRedirect(token)).then((result) => {
 			dispatch(reset());
 			if (completeAuthRedirect.fulfilled.match(result)) {
 				navigate('/', { replace: true });
