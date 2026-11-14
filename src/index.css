@@ -905,6 +905,18 @@ a.field-hint {
 	.state {
 		padding: var(--space-5) var(--space-4);
 	}
+
+	/* Mobile toolbars resize the viewport while scrolling, so a pager stuck to
+	   the bottom edge jumps around. Keep it in the flow under the labels. */
+	.pager {
+		position: static;
+		box-shadow: none;
+		clip-path: none;
+	}
+
+	.pager--stuck::before {
+		content: none;
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {

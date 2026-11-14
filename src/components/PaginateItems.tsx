@@ -15,15 +15,34 @@ export const PaginateItems = (props: {
 	const [stuck, setStuck] = useState(false);
 	useEffect(() => {
 		const node = ref.current;
-		if (!node || typeof IntersectionObserver === 'undefined') {
+		if (!node || typeof IntersectionObserver === 'undefined' || typeof window.matchMedia !== 'function') {
 			return;
 		}
-		const observer = new IntersectionObserver(
-			([entry]) => setStuck(entry.intersectionRatio < 1 && entry.boundingClientRect.top > 0),
-			{ threshold: [1] }
-		);
-		observer.observe(node);
-		return () => observer.disconnect();
+
+		// Must match the 720px breakpoint in index.css where the pager stops being sticky
+		const wide = window.matchMedia('(min-width: 721px)');
+		let observer: IntersectionObserver | null = null;
+
+		const sync = () => {
+			observer?.disconnect();
+			observer = null;
+			if (!wide.matches) {
+				setStuck(false);
+				return;
+			}
+			observer = new IntersectionObserver(
+				([entry]) => setStuck(entry.intersectionRatio < 1 && entry.boundingClientRect.top > 0),
+				{ threshold: [1] }
+			);
+			observer.observe(node);
+		};
+
+		sync();
+		wide.addEventListener('change', sync);
+		return () => {
+			wide.removeEventListener('change', sync);
+			observer?.disconnect();
+		};
 	}, []);
 
 	const nextPage = (e: SyntheticEvent) => {
