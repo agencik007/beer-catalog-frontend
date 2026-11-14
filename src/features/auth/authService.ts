@@ -2,13 +2,24 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import { AuthUser, UserEntity } from 'types';
 import { authCallbackUrl, authClient, bearer } from '../../lib/authClient';
+import i18n, { currentLanguage } from '../../i18n';
+import { en } from '../../i18n/en';
 
 const STORAGE_KEY = 'user';
 
 type BetterAuthError = { code?: string; message?: string; status?: number } | null;
 
-const errorMessage = (error: BetterAuthError, fallback: string) =>
-	error?.message || fallback;
+type AuthCode = keyof typeof en.auth.codes;
+
+const isAuthCode = (code: string): code is AuthCode => code in en.auth.codes;
+
+/** Known better-auth codes in the UI language; otherwise the server text (English UI) or the fallback. */
+const errorMessage = (error: BetterAuthError, fallback: string) => {
+	if (error?.code && isAuthCode(error.code)) {
+		return i18n.t(`auth.codes.${error.code}`);
+	}
+	return (currentLanguage() === 'en' && error?.message) || fallback;
+};
 
 type SessionUser = { id: string; name: string; email: string; role?: string | null };
 
@@ -49,15 +60,11 @@ export const register = createAsyncThunk(
 		});
 
 		if (error) {
-			const message = errorMessage(error, 'Registration failed.');
-			toast.error(message);
-			return rejectWithValue(message);
+			// Shown under the form by the Register page
+			return rejectWithValue(errorMessage(error, i18n.t('auth.registerFailed')));
 		}
 
-		toast.success(
-			'Account created! Check your inbox and click the verification link.',
-			{ autoClose: 8000 }
-		);
+		toast.success(i18n.t('auth.registered'), { autoClose: 8000 });
 		return null;
 	}
 );
@@ -78,15 +85,15 @@ export const login = createAsyncThunk(
 		if (error || !data?.token) {
 			const message =
 				error?.code === 'EMAIL_NOT_VERIFIED'
-					? 'Please verify your email first. We have sent you a new verification link.'
-					: errorMessage(error, 'Invalid email or password.');
-			toast.error(message, { autoClose: 8000 });
+					? i18n.t('auth.verifyFirst')
+					: errorMessage(error, i18n.t('auth.invalidCredentials'));
+			// Shown under the form by the Login page
 			return rejectWithValue(message);
 		}
 
 		const authUser = toAuthUser(data.user as SessionUser, data.token);
 		storeUser(authUser);
-		toast.success('Successfully logged in.');
+		toast.success(i18n.t('auth.loggedIn'));
 		return authUser;
 	}
 );
@@ -103,10 +110,7 @@ export const completeAuthRedirect = createAsyncThunk(
 		});
 
 		if (error || !data) {
-			const message = errorMessage(
-				error,
-				'Could not sign you in. Please log in again.'
-			);
+			const message = errorMessage(error, i18n.t('auth.sessionFailed'));
 			return rejectWithValue(message);
 		}
 
@@ -115,7 +119,7 @@ export const completeAuthRedirect = createAsyncThunk(
 			tokenFromRedirect || data.session.token
 		);
 		storeUser(authUser);
-		toast.success(`Welcome, ${authUser.name}!`);
+		toast.success(i18n.t('auth.welcome', { name: authUser.name }));
 		return authUser;
 	}
 );
@@ -133,7 +137,7 @@ export const logout = createAsyncThunk('auth/logout', async () => {
 		console.log(error?.message);
 	} finally {
 		clearStoredUser();
-		toast.info('Successfully logged out');
+		toast.info(i18n.t('auth.loggedOut'));
 	}
 });
 
@@ -142,12 +146,12 @@ export const requestPasswordReset = async (email: string) => {
 		email,
 		redirectTo: `${window.location.origin}/reset-password`,
 	});
-	if (error) throw new Error(errorMessage(error, 'Could not send the reset link.'));
+	if (error) throw new Error(errorMessage(error, i18n.t('auth.resetLinkFailed')));
 };
 
 export const resetPassword = async (token: string, newPassword: string) => {
 	const { error } = await authClient.resetPassword({ token, newPassword });
-	if (error) throw new Error(errorMessage(error, 'Could not reset the password.'));
+	if (error) throw new Error(errorMessage(error, i18n.t('auth.resetFailed')));
 };
 
 export const signInWithProvider = async (provider: 'google' | 'github') => {
@@ -156,7 +160,7 @@ export const signInWithProvider = async (provider: 'google' | 'github') => {
 		callbackURL: authCallbackUrl(),
 		errorCallbackURL: `${window.location.origin}/login`,
 	});
-	if (error) toast.error(errorMessage(error, `Could not sign in with ${provider}.`));
+	if (error) toast.error(errorMessage(error, i18n.t('auth.providerFailed', { provider })));
 };
 
 const authService = {

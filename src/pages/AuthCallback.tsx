@@ -6,16 +6,22 @@ import { AppDispatch, RootState } from 'src/app/store';
 import { completeAuthRedirect } from '../features/auth/authService';
 import { reset } from '../features/auth/authSlice';
 import { Spinner } from '../components/Spinner';
+import { useTranslation } from 'react-i18next';
 
-const errorMessages: Record<string, string> = {
-	INVALID_TOKEN: 'This link is invalid. Please request a new one.',
-	TOKEN_EXPIRED: 'This link has expired. Log in to receive a new verification email.',
-	invalid_token: 'This link is invalid. Please request a new one.',
-	token_expired: 'This link has expired. Log in to receive a new verification email.',
-};
+const errorKeys = {
+	INVALID_TOKEN: 'callback.invalidLink',
+	invalid_token: 'callback.invalidLink',
+	TOKEN_EXPIRED: 'callback.expiredLink',
+	token_expired: 'callback.expiredLink',
+} as const;
+
+function isKnownError(code: string): code is keyof typeof errorKeys {
+	return code in errorKeys;
+}
 
 // Landing page after email verification or OAuth sign-in
 export function AuthCallback() {
+	const { t } = useTranslation();
 	const [searchParams] = useSearchParams();
 	const navigate = useNavigate();
 	const dispatch: AppDispatch = useDispatch();
@@ -43,18 +49,24 @@ export function AuthCallback() {
 			if (completeAuthRedirect.fulfilled.match(result)) {
 				navigate('/', { replace: true });
 			} else {
-				toast.error(String(result.payload ?? 'Could not sign you in.'));
+				toast.error(String(result.payload ?? t('auth.sessionFailed')));
 			}
 		});
-	}, [error, dispatch, navigate]);
+	}, [error, dispatch, navigate, t]);
 
 	if (error || isError) {
 		return (
-			<section className="heading">
-				<h1>Sign-in problem</h1>
-				<p>{error ? errorMessages[error] ?? `Error: ${error}` : String(message)}</p>
-				<Link to="/login">
-					<button className="btn">Go to login</button>
+			<section className="state state--center">
+				<h2>{t('callback.title')}</h2>
+				<p>
+					{error
+						? isKnownError(error)
+							? t(errorKeys[error])
+							: t('callback.errorCode', { code: error })
+						: String(message)}
+				</p>
+				<Link to="/login" className="btn">
+					{t('callback.goToLogin')}
 				</Link>
 			</section>
 		);

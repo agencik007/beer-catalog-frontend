@@ -7,7 +7,11 @@ import { AppDispatch, RootState } from 'src/app/store';
 import { BeerEntity } from 'types';
 import { Spinner } from '../components/Spinner';
 import { deleteBeer, getBeer } from '../features/beers/beerSlice';
-import BeerImage from '../assets/images/beer.png';
+import { BeerPhoto } from '../components/BeerPhoto';
+import { beerStyleKey, beerStyleLabel, formatAlcohol, formatDate } from '../lib/beerStyle';
+import { FiArrowLeft } from 'react-icons/fi';
+import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 
 import './BeerDetails.css';
 
@@ -37,18 +41,18 @@ function readOrigin(state: unknown): ListOrigin {
 	};
 }
 
-function listReturn(state: unknown): { href: string; label: string } {
+function listReturn(state: unknown, t: TFunction): { href: string; label: string } {
 	const origin = readOrigin(state);
 
 	if (origin.from === '/user') {
 		return {
 			href: `/user${origin.search ?? ''}`,
-			label: 'Back to your beers',
+			label: t('beer.backToYours'),
 		};
 	}
 
 	if (!origin.from) {
-		return { href: '/', label: 'Back to the list' };
+		return { href: '/', label: t('beer.backToList') };
 	}
 
 	const params = new URLSearchParams(origin.search ?? '');
@@ -60,7 +64,7 @@ function listReturn(state: unknown): { href: string; label: string } {
 
 	return {
 		href: query ? `/?${query}` : '/',
-		label: 'Back to the list',
+		label: t('beer.backToList'),
 	};
 }
 
@@ -73,53 +77,38 @@ function isBlank(value: unknown): boolean {
 }
 
 function BeerMissing() {
+	const { t } = useTranslation();
 	return (
-		<section className="heading">
-			<h3>Beer not found.</h3>
-			<Link to="/" className="beer-detail-back">
-				Back to the list
+		<section className="state state--center">
+			<h2>{t('beer.notFoundTitle')}</h2>
+			<p>{t('beer.notFoundBody')}</p>
+			<Link to="/" className="btn">
+				{t('beer.backToList')}
 			</Link>
 		</section>
 	);
 }
 
 function BeerLoadError({ onRetry }: { onRetry: () => void }) {
+	const { t } = useTranslation();
 	return (
-		<section className="heading">
-			<h3>Could not load this beer.</h3>
-			<button type="button" className="btn beer-detail-retry" onClick={onRetry}>
-				Try again
+		<section className="state state--center">
+			<h2>{t('beer.loadErrorTitle')}</h2>
+			<p>{t('list.loadErrorBody')}</p>
+			<button type="button" className="btn" onClick={onRetry}>
+				{t('common.tryAgain')}
 			</button>
 		</section>
 	);
 }
 
-function BeerPhoto({ avatar }: { avatar?: string }) {
-	const [failedSrc, setFailedSrc] = useState<string | null>(null);
-	const source =
-		avatar && avatar.trim() !== '' && failedSrc !== avatar
-			? avatar
-			: BeerImage;
-
-	return (
-		<img
-			src={source}
-			alt="beer"
-			onError={() => {
-				if (avatar) {
-					setFailedSrc(avatar);
-				}
-			}}
-		/>
-	);
-}
-
 export function BeerDetails() {
+	const { t } = useTranslation();
 	const { id } = useParams();
 	const location = useLocation();
 	const navigate = useNavigate();
 	const dispatch: AppDispatch = useDispatch();
-	const back = listReturn(location.state);
+	const back = listReturn(location.state, t);
 	const validId = typeof id === 'string' && BEER_ID.test(id);
 
 	const { user } = useSelector((state: RootState) => state.auth);
@@ -191,54 +180,77 @@ export function BeerDetails() {
 
 		dispatch(deleteBeer(id)).then((action) => {
 			if (deleteBeer.fulfilled.match(action)) {
-				toast.success('Successfully deleted.');
+				toast.success(t('beer.deleted'));
 				navigate(back.href);
 				return;
 			}
 
 			setDeleting(false);
-			setDeleteError('Could not delete this beer.');
+			setDeleteError(t('beer.deleteFailedDetail'));
 		});
 	};
 
 	return (
-		<section className="heading">
-			<Link to={back.href} className="beer-detail-back">
-				{back.label}
+		<section className="detail">
+			<Link to={back.href} className="detail__back">
+				<FiArrowLeft aria-hidden="true" /> {back.label}
 			</Link>
-			<article className="beer-detail">
-				<div className="beer-detail-media">
-					<BeerPhoto avatar={beer.avatar} />
+			<article className="detail__label" data-style={beerStyleKey(beer.type)}>
+				<div className="detail__field">
+					<span className="detail__type">{beerStyleLabel(beer.type, t)}</span>
+					<h1 className="detail__name">{isBlank(beer.name) ? '—' : beer.name}</h1>
+					<BeerPhoto avatar={beer.avatar} name={beer.name} className="detail__img" />
 				</div>
-				<div className="beer-detail-body">
-					<h1>{isBlank(beer.name) ? '—' : beer.name}</h1>
-					<h2>{isBlank(beer.type) ? '—' : beer.type}</h2>
-					<div className="rating">
-						<Rating initialValue={rating} readonly />
-					</div>
-					<strong className="alcohol">
-						Alcohol: {isBlank(beer.alcohol) ? '—' : beer.alcohol}%
-					</strong>
-					{isBlank(beer.description) ? null : (
-						<p className="beer-detail-description">{beer.description}</p>
+				<div className="detail__back-label">
+					<h2 className="detail__heading">{t('beer.about')}</h2>
+					{isBlank(beer.description) ? (
+						<p className="detail__desc detail__desc--empty">{t('beer.noDescription')}</p>
+					) : (
+						<p className="detail__desc">{beer.description}</p>
 					)}
-					<small className="beer-detail-date">
-						Created:{' '}
-						{new Date(beer.createdAt).toLocaleDateString('pl-PL')} by{' '}
-						{beer.createdBy}
-					</small>
+					<dl className="detail__facts">
+						<div>
+							<dt>{t('beer.alcohol')}</dt>
+							<dd className="num">{formatAlcohol(beer.alcohol)}</dd>
+						</div>
+						<div>
+							<dt>{t('beer.rating')}</dt>
+							<dd>
+								<span className="visually-hidden">{t('beer.ratingOf', { value: rating })}</span>
+								<Rating
+									initialValue={rating}
+									readonly
+									size={20}
+									fillColor="#111111"
+									emptyColor="rgba(17,17,17,0.2)"
+								/>
+							</dd>
+						</div>
+						<div>
+							<dt>{t('beer.addedBy')}</dt>
+							<dd>{isBlank(beer.createdBy) ? '—' : beer.createdBy}</dd>
+						</div>
+						<div>
+							<dt>{t('beer.addedOn')}</dt>
+							<dd className="num">{formatDate(beer.createdAt)}</dd>
+						</div>
+					</dl>
 					{canDelete ? (
-						<button
-							type="button"
-							className="close"
-							onClick={onDelete}
-							disabled={deleting}
-						>
-							Delete
-						</button>
-					) : null}
-					{deleteError ? (
-						<p className="beer-detail-delete-error">{deleteError}</p>
+						<div className="detail__actions">
+							<button
+								type="button"
+								className="btn btn--danger"
+								onClick={onDelete}
+								disabled={deleting}
+							>
+								{deleting ? t('beer.deleting') : t('beer.deleteBeer')}
+							</button>
+							{deleteError ? (
+								<p className="detail__error" role="alert">
+									{deleteError}
+								</p>
+							) : null}
+						</div>
 					) : null}
 				</div>
 			</article>

@@ -1,13 +1,14 @@
-import React from 'react';
-import { FaSignInAlt, FaSignOutAlt } from 'react-icons/fa';
-import { IoIosBeer } from 'react-icons/io';
-import { Link, useNavigate } from 'react-router-dom';
+import { FaPlus } from 'react-icons/fa';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { reset } from '../features/auth/authSlice';
 import { logout } from '../features/auth/authService';
 import { AppDispatch, RootState } from 'src/app/store';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 export const Header = () => {
+	const { t } = useTranslation();
 	const navigate = useNavigate();
 	const dispatch: AppDispatch = useDispatch();
 
@@ -19,57 +20,53 @@ export const Header = () => {
 		navigate('/');
 	};
 
-	function toCreateBeerForm() {
-		navigate('/create');
-	}
-
-	function toUserBeers() {
-		navigate('/user');
-	}
-
 	return (
-		<header className="header">
-			<div className="logo">
-				<Link to="/">Welcome to the world of beers!</Link>
+		<header className="site-header">
+			<div className="site-header__inner">
+				<a className="skip-link" href="#main">
+					{t('nav.skip')}
+				</a>
+				<Link to="/" className="wordmark">
+					<span className="wordmark__mark" aria-hidden="true">
+						<i style={{ background: 'var(--style-ipa)' }} />
+						<i style={{ background: 'var(--style-lager)' }} />
+						<i style={{ background: 'var(--style-stout)' }} />
+					</span>
+					World of beers
+				</Link>
+				<nav className="site-nav" aria-label={t('nav.main')}>
+					<NavLink to="/" end className="nav-link">
+						{t('nav.allBeers')}
+					</NavLink>
+					{user ? (
+						<NavLink to="/user" className="nav-link">
+							{t('nav.yourBeers')}
+						</NavLink>
+					) : null}
+					<div className="site-nav__actions">
+						{user ? (
+							<>
+								<button type="button" className="nav-link" onClick={onLogout}>
+									{t('nav.logOut')}
+								</button>
+								<Link to="/create" className="btn">
+									<FaPlus aria-hidden="true" /> {t('nav.createBeer')}
+								</Link>
+							</>
+						) : (
+							<>
+								<NavLink to="/login" className="nav-link">
+									{t('nav.logIn')}
+								</NavLink>
+								<Link to="/register" className="btn">
+									{t('nav.register')}
+								</Link>
+							</>
+						)}
+						<LanguageSwitcher />
+					</div>
+				</nav>
 			</div>
-			<ul>
-				{user ? (
-					<>
-						<li>
-							<button className="btn" onClick={toCreateBeerForm}>
-								<IoIosBeer /> Create beer
-							</button>
-						</li>
-						<li>
-							<button className="btn" onClick={toUserBeers}>
-								<IoIosBeer /> Your Beers
-							</button>
-						</li>
-						<li>
-							<button className="btn" onClick={onLogout}>
-								<FaSignOutAlt /> Logout
-							</button>
-						</li>
-					</>
-				) : (
-					<>
-						<li>
-							<Link to="/login">
-								<button className="btn">
-									<FaSignInAlt /> Login
-								</button>
-							</Link>
-						</li>
-						<li>
-							<Link to="/register">
-								<button className="btn">
-									<FaSignOutAlt /> Register
-								</button>
-							</Link>
-						</li>
-					</>
-				)}
-			</ul>
 		</header>
 	);
 };

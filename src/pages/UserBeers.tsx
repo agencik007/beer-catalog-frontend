@@ -1,20 +1,22 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Spinner } from '../components/Spinner';
 import { userBeers, reset } from '../features/beers/beerSlice';
-import { BeerItem } from '../components/BeerItem';
+import { BeerResults } from '../components/BeerResults';
+import { StyleLegend } from '../components/StyleLegend';
 import { AppDispatch, RootState } from 'src/app/store';
-import { BeerEntity } from 'types';
 import { PaginateItems } from '../components/PaginateItems';
+import { useTranslation } from 'react-i18next';
 
 export function UserBeers() {
+	const { t } = useTranslation();
 	const navigate = useNavigate();
 	const dispatch: AppDispatch = useDispatch();
 
 	const { user } = useSelector((state: RootState) => state.auth);
 
-	const { results, pageCount, isLoading, isError, message } = useSelector(
+	const { results, pageCount, itemCount, isLoading, isError } = useSelector(
 		(state: RootState) => state.beers
 	);
 
@@ -23,13 +25,10 @@ export function UserBeers() {
 	const [page, setPage] = useState(
 		() => Number(searchParams.get('page')) || 1
 	);
-	const [limit] = useState(() => Number(searchParams.get('limit')) || 5);
+	const [limit] = useState(() => Number(searchParams.get('limit')) || 6);
+	const [attempt, setAttempt] = useState(0);
 
 	useEffect(() => {
-		if (isError) {
-			console.log(message);
-		}
-
 		if (!user) {
 			navigate('/');
 		}
@@ -44,33 +43,52 @@ export function UserBeers() {
 		return () => {
 			dispatch(reset());
 		};
-	}, [user, navigate, page, limit, isError, message, dispatch]);
+	}, [user, navigate, page, limit, attempt, dispatch]);
 
 	if (isLoading) {
 		return <Spinner />;
 	}
 
+	if (isError) {
+		return (
+			<section className="state state--center" role="alert">
+				<h2>{t('list.loadErrorTitle')}</h2>
+				<p>{t('list.loadErrorBody')}</p>
+				<button type="button" className="btn" onClick={() => setAttempt((n) => n + 1)}>
+					{t('common.tryAgain')}
+				</button>
+			</section>
+		);
+	}
+
 	return (
 		<>
-			<section className="heading">
-				<h1 className="welcome">Welcome {user?.name}</h1>
+			<header className="page-head">
+				<div>
+					<h1>{t('userList.title')}</h1>
+					<p>
+						{t('list.welcome', { name: user?.name })}{' '}
+						{itemCount > 0 ? t('userList.count', { count: itemCount }) : null}
+					</p>
+				</div>
+				<StyleLegend />
+			</header>
 
-				<p>Your beers</p>
-
-				<section className="content">
-					{page > pageCount && pageCount > 0 ? (
-						<h3>No more beers and pages.</h3>
-					) : results?.length > 0 ? (
-						<div className="beers">
-							{results?.map((beer: BeerEntity) => (
-								<BeerItem key={beer._id + ''} {...beer} />
-							))}
-						</div>
-					) : (
-						<h3>You have not set any beers</h3>
-					)}
-				</section>
-			</section>
+			<BeerResults
+				page={page}
+				pageCount={pageCount}
+				results={results}
+				onFirstPage={() => setPage(1)}
+				empty={
+					<>
+						<h2>{t('userList.emptyTitle')}</h2>
+						<p>{t('userList.emptyBody')}</p>
+						<Link to="/create" className="btn">
+							{t('nav.createBeer')}
+						</Link>
+					</>
+				}
+			/>
 			{pageCount > 0 && page <= pageCount && (
 				<PaginateItems
 					setPage={setPage}

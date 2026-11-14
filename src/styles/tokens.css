@@ -1,0 +1,67 @@
+/* World of beers: craft label system tokens */
+:root {
+	/* Paper and ink */
+	--paper: #f2efe9;
+	--stock: #ffffff;
+	--ink: #111111;
+	--ink-soft: #3d3a35;
+	--ink-muted: #5c5850;
+	--rule: 3px solid var(--ink);
+	--rule-thin: 2px solid var(--ink);
+	--hairline: 1px solid rgba(17, 17, 17, 0.16);
+
+	/* Interface accents */
+	--cobalt: #1f4fd8;
+	--cobalt-ink: #ffffff;
+	--danger: #b3261e;
+	--danger-wash: #fde8e6;
+	--success: #1f6b3a;
+	--select: #ffd23f;
+
+	/* Style inks: one fixed colour per beer style, everywhere */
+	--style-ipa: #ff5a1f;
+	--style-apa: #ffb020;
+	--style-lager: #ffd23f;
+	--style-pilsner: #b5d94a;
+	--style-stout: #3a2418;
+	--style-porter: #8a2b1e;
+	--style-wheat: #f3df9a;
+	--style-sour: #ff4f8b;
+	--style-other: #1f4fd8;
+
+	/* Type */
+	--font: 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
+	--text-xs: 0.75rem;
+	--text-sm: 0.875rem;
+	--text-base: 1rem;
+	--text-lg: 1.125rem;
+	--text-xl: 1.5rem;
+	--text-2xl: clamp(1.75rem, 1.2rem + 1.6vw, 2.5rem);
+	--text-display: clamp(2.5rem, 1.6rem + 3.4vw, 4.5rem);
+	--tracking-display: -0.035em;
+	--tracking-caps: 0.12em;
+
+	/* Space (4px base) */
+	--space-1: 4px;
+	--space-2: 8px;
+	--space-3: 12px;
+	--space-4: 16px;
+	--space-5: 24px;
+	--space-6: 32px;
+	--space-7: 48px;
+	--space-8: 64px;
+	--space-9: 96px;
+
+	/* Shape and depth */
+	--radius: 6px;
+	--radius-pill: 999px;
+	--shadow-lift: 0 18px 32px -18px rgba(17, 17, 17, 0.45);
+
+	/* Motion */
+	--ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+	--dur-fast: 160ms;
+	--dur: 280ms;
+	--dur-print: 720ms;
+
+	--page-width: 1240px;
+}
