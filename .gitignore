@@ -24,3 +24,6 @@ yarn-error.log*
 
 .idea
 .history
+
+# impeccable design tool working files
+.impeccable/

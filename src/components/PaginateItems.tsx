@@ -1,4 +1,6 @@
-import { Dispatch, SyntheticEvent } from 'react';
+import { Dispatch, SyntheticEvent, useEffect, useRef, useState } from 'react';
+import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
+import { useTranslation } from 'react-i18next';
 
 export const PaginateItems = (props: {
 	setPage: Dispatch<React.SetStateAction<number>>;
@@ -6,6 +8,23 @@ export const PaginateItems = (props: {
 	pageCount: number;
 }) => {
 	const { setPage, page, pageCount } = props;
+	const { t } = useTranslation();
+
+	// bottom: -1px means a stuck pager is never fully visible, so a ratio below 1 marks it stuck
+	const ref = useRef<HTMLElement>(null);
+	const [stuck, setStuck] = useState(false);
+	useEffect(() => {
+		const node = ref.current;
+		if (!node || typeof IntersectionObserver === 'undefined') {
+			return;
+		}
+		const observer = new IntersectionObserver(
+			([entry]) => setStuck(entry.intersectionRatio < 1 && entry.boundingClientRect.top > 0),
+			{ threshold: [1] }
+		);
+		observer.observe(node);
+		return () => observer.disconnect();
+	}, []);
 
 	const nextPage = (e: SyntheticEvent) => {
 		e.preventDefault();
@@ -28,13 +47,14 @@ export const PaginateItems = (props: {
 	};
 
 	return (
-		<div className="pager">
+		<nav ref={ref} className={`pager${stuck ? ' pager--stuck' : ''}`} aria-label={t('pager.label')}>
 			<button
 				className="paginate-item"
 				disabled={page <= 1}
 				onClick={previousPage}
+				aria-label={t('pager.previous')}
 			>
-				{'<'}
+				<FiArrowLeft aria-hidden="true" />
 			</button>
 
 			<button
@@ -45,7 +65,7 @@ export const PaginateItems = (props: {
 				1
 			</button>
 
-			{page > 3 && <span>...</span>}
+			{page > 3 && <span className="pager__gap" aria-hidden="true">…</span>}
 
 			{page > 2 && (
 				<button className="paginate-item" onClick={previousPage}>
@@ -54,7 +74,7 @@ export const PaginateItems = (props: {
 			)}
 
 			{page !== 1 && page !== pageCount && (
-				<button className="paginate-item active" disabled>
+				<button className="paginate-item active" disabled aria-current="page">
 					{page}
 				</button>
 			)}
@@ -65,7 +85,7 @@ export const PaginateItems = (props: {
 				</button>
 			)}
 
-			{page < pageCount - 2 && <span>...</span>}
+			{page < pageCount - 2 && <span className="pager__gap" aria-hidden="true">…</span>}
 
 			{pageCount !== 1 ? (
 				<button
@@ -83,9 +103,10 @@ export const PaginateItems = (props: {
 				className="paginate-item"
 				disabled={page >= pageCount}
 				onClick={nextPage}
+				aria-label={t('pager.next')}
 			>
-				{'>'}
+				<FiArrowRight aria-hidden="true" />
 			</button>
-		</div>
+		</nav>
 	);
 };

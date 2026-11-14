@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import { Header } from './components/Header';
-import { BeerBackground } from './components/BeerBackground';
+import { Footer } from './components/Footer';
 import { Main } from './pages/Main';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
@@ -30,11 +30,9 @@ axios.interceptors.response.use(undefined, function sessionExpiredInterceptor(er
 function App() {
 	return (
 		<>
-			<BeerBackground />
-
 			<Router>
-				<div className="container">
-					<Header />
+				<Header />
+				<main className="page" id="main">
 					<Routes>
 						<Route path="/" element={<Main />} />
 						<Route path="/beer/:id" element={<BeerDetails />} />
@@ -46,9 +44,10 @@ function App() {
 						<Route path="/reset-password" element={<ResetPassword />} />
 						<Route path="/create" element={<CreateBeerForm />} />
 					</Routes>
-				</div>
+				</main>
+				<Footer />
 			</Router>
-			<ToastContainer />
+			<ToastContainer position="bottom-right" />
 		</>
 	);
 }

@@ -1,11 +1,12 @@
 import { SyntheticEvent, useState } from 'react';
-import { FaKey } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { requestPasswordReset } from '../features/auth/authService';
 import { Spinner } from '../components/Spinner';
+import { useTranslation } from 'react-i18next';
 
 export function ForgotPassword() {
+	const { t } = useTranslation();
 	const [email, setEmail] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const [sent, setSent] = useState(false);
@@ -28,42 +29,41 @@ export function ForgotPassword() {
 	}
 
 	return (
-		<section className="heading">
-			<h1>
-				<FaKey /> Forgot password
-			</h1>
-			{sent ? (
+		<section className="auth">
+			<header className="auth__head">
+				<h1>{t('forgot.title')}</h1>
 				<p>
-					If an account exists for {email}, you will receive an email with a link to
-					reset your password.
+					{sent ? t('forgot.sent', { email }) : t('forgot.lead')}
 				</p>
-			) : (
-				<>
-					<p>Enter your email and we will send you a reset link.</p>
-					<section className="form">
-						<form onSubmit={onSubmit}>
-							<div className="form-group">
-								<input
-									type="email"
-									className="form-control"
-									name="email"
-									required={true}
-									value={email}
-									placeholder="Enter your email"
-									onChange={(e) => setEmail(e.target.value)}
-								/>
-							</div>
-							<div className="form-group">
-								<button type="submit" className="btn btn-block">
-									Send reset link
-								</button>
-							</div>
-						</form>
-					</section>
-				</>
+			</header>
+			{sent ? null : (
+				<section className="form">
+					<form onSubmit={onSubmit}>
+						<div className="form-group">
+							<label className="field-label" htmlFor="email">
+								{t('common.email')}
+							</label>
+							<input
+								type="email"
+								id="email"
+								name="email"
+								required={true}
+								autoComplete="email"
+								value={email}
+								placeholder={t('common.emailPlaceholder')}
+								onChange={(e) => setEmail(e.target.value)}
+							/>
+						</div>
+						<div className="form-group">
+							<button type="submit" className="btn btn-block">
+								{t('forgot.submit')}
+							</button>
+						</div>
+					</form>
+				</section>
 			)}
-			<p>
-				<Link to="/login">Back to login</Link>
+			<p className="auth__foot">
+				<Link to="/login">{t('forgot.back')}</Link>
 			</p>
 		</section>
 	);
