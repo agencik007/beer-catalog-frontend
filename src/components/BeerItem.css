@@ -128,9 +128,42 @@
 	pointer-events: none;
 }
 
+/* Narrow labels: alcohol + rating side by side, "added by" on its own row.
+   The three-column strip only fits once the card itself is wide enough. */
 .label__back {
 	display: grid;
-	grid-template-columns: auto auto minmax(0, 1fr);
+	grid-template-columns: auto minmax(0, 1fr);
+}
+
+.label__back > div:last-child {
+	grid-column: 1 / -1;
+}
+
+.label__back > div:last-child dd {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 0 var(--space-3);
+}
+
+@container (min-width: 620px) {
+	.label__back {
+		grid-template-columns: auto auto minmax(0, 1fr);
+	}
+
+	.label__back > div:last-child {
+		grid-column: auto;
+	}
+
+	.label__back > div:last-child dd {
+		display: block;
+	}
+}
+
+.label__back dt,
+.label__back dd {
+	min-width: 0;
+	overflow-wrap: anywhere;
 }
 
 .label__back > div {
@@ -142,8 +175,14 @@
 	border-top: var(--rule);
 }
 
-.label__back > div + div {
+.label__back > div:nth-child(2) {
 	border-left: var(--rule);
+}
+
+@container (min-width: 620px) {
+	.label__back > div + div {
+		border-left: var(--rule);
+	}
 }
 
 .label__back dt {
@@ -190,15 +229,6 @@
 
 	.label__img {
 		height: 150px;
-	}
-
-	.label__back {
-		grid-template-columns: 1fr 1fr;
-	}
-
-	.label__back > div:last-child {
-		grid-column: 1 / -1;
-		border-left: 0;
 	}
 }
 
