@@ -8,6 +8,7 @@ import { BeerEntity } from 'types';
 import { Spinner } from '../components/Spinner';
 import { deleteBeer, getBeer } from '../features/beers/beerSlice';
 import { BeerPhoto } from '../components/BeerPhoto';
+import { BeerReviews } from '../components/BeerReviews';
 import { beerStyleKey, beerStyleLabel, formatAlcohol, formatDate } from '../lib/beerStyle';
 import { FiArrowLeft } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
@@ -165,8 +166,9 @@ export function BeerDetails() {
 	}
 
 	const beer: BeerEntity = selectedBeer;
-	const ratingValue = Number(beer.rating);
+	const ratingValue = Number(beer.ratingAvg);
 	const rating = Number.isFinite(ratingValue) ? ratingValue : 0;
+	const ratingCount = Number(beer.ratingCount) || 0;
 	const canDelete =
 		!!user && (beer.user === user._id || user.role === 'admin');
 
@@ -214,16 +216,26 @@ export function BeerDetails() {
 							<dd className="num">{formatAlcohol(beer.alcohol)}</dd>
 						</div>
 						<div>
-							<dt>{t('beer.rating')}</dt>
+							<dt>{t('beer.communityRating')}</dt>
 							<dd>
-								<span className="visually-hidden">{t('beer.ratingOf', { value: rating })}</span>
-								<Rating
-									initialValue={rating}
-									readonly
-									size={20}
-									fillColor="#111111"
-									emptyColor="rgba(17,17,17,0.2)"
-								/>
+								{ratingCount > 0 ? (
+									<>
+										<span className="visually-hidden">{t('beer.ratingOf', { value: rating })}</span>
+										<Rating
+											initialValue={rating}
+											readonly
+											allowFraction
+											size={20}
+											fillColor="#111111"
+											emptyColor="rgba(17,17,17,0.2)"
+										/>
+										<span className="detail__rating-count num">
+											{rating.toFixed(1)} · {t('beer.ratingCount', { count: ratingCount })}
+										</span>
+									</>
+								) : (
+									t('beer.noRatings')
+								)}
 							</dd>
 						</div>
 						<div>
@@ -254,6 +266,7 @@ export function BeerDetails() {
 					) : null}
 				</div>
 			</article>
+			<BeerReviews beerId={id} ratingAvg={rating} ratingCount={ratingCount} />
 		</section>
 	);
 }

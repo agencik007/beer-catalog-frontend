@@ -210,3 +210,11 @@
 		border-top: var(--rule);
 	}
 }
+
+.detail__rating-count {
+	display: block;
+	margin-top: var(--space-1);
+	color: var(--ink-muted);
+	font-size: var(--text-sm);
+	font-weight: 700;
+}

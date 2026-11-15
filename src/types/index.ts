@@ -10,10 +10,38 @@ export interface BeerEntity {
 	createdBy: string;
 	name: string;
 	type: string;
-	rating: number;
+	/** Sent only when creating a beer; becomes the creator's first review. */
+	rating?: number;
+	/** Community average of review ratings (0 when unrated). */
+	ratingAvg?: number;
+	ratingCount?: number;
 	alcohol: number;
 	description: string;
 	avatar?: string;
+}
+
+export interface ReviewEntity {
+	_id: string;
+	beer: string;
+	user: string;
+	userName: string;
+	rating: number;
+	comment?: string;
+	createdAt: string;
+	updatedAt: string;
+}
+
+export interface ReviewsPage {
+	currentPage: number;
+	itemCount: number;
+	pageCount: number;
+	limitPerPage: number;
+	results: ReviewEntity[];
+}
+
+export interface RatingSummary {
+	ratingAvg: number;
+	ratingCount: number;
 }
 
 export interface UserEntity {

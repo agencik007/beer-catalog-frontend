@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { beerService } from './beerService';
-import { BeerEntity } from 'types';
+import { BeerEntity, RatingSummary } from 'types';
 
 type SelectedBeerStatus = 'idle' | 'loading' | 'ready' | 'notFound' | 'error';
 
@@ -131,6 +131,22 @@ export const beerSlice = createSlice({
 	initialState,
 	reducers: {
 		reset: (state) => initialState,
+		// Keeps the cached community rating in sync after a review changes
+		ratingUpdated: (
+			state,
+			{ payload }: PayloadAction<{ beerId: string } & RatingSummary>
+		) => {
+			const { beerId, ratingAvg, ratingCount } = payload;
+			if (state.selectedBeer && String(state.selectedBeer._id) === beerId) {
+				state.selectedBeer.ratingAvg = ratingAvg;
+				state.selectedBeer.ratingCount = ratingCount;
+			}
+			const listed = state.results.find((beer) => String(beer._id) === beerId);
+			if (listed) {
+				listed.ratingAvg = ratingAvg;
+				listed.ratingCount = ratingCount;
+			}
+		},
 	},
 	extraReducers: (builder) => {
 		builder
@@ -254,5 +270,5 @@ export const beerSlice = createSlice({
 	},
 });
 
-export const { reset } = beerSlice.actions;
+export const { reset, ratingUpdated } = beerSlice.actions;
 export default beerSlice.reducer;

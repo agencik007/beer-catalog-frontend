@@ -52,7 +52,8 @@ export const BeerItem = (beer: BeerEntity & { index?: number }) => {
 
 	const isOwner = !!user && beer.user === user._id;
 	const canDelete = !!user && (isOwner || user.role === 'admin');
-	const rating = Number.isFinite(Number(beer.rating)) ? Number(beer.rating) : 0;
+	const rating = Number.isFinite(Number(beer.ratingAvg)) ? Number(beer.ratingAvg) : 0;
+	const ratingCount = Number(beer.ratingCount) || 0;
 
 	const field = (
 		<>
@@ -83,16 +84,26 @@ export const BeerItem = (beer: BeerEntity & { index?: number }) => {
 					<dd className="num">{formatAlcohol(beer.alcohol)}</dd>
 				</div>
 				<div>
-					<dt>{t('beer.rating')}</dt>
+					<dt>{t('beer.communityRating')}</dt>
 					<dd>
-						<span className="visually-hidden">{t('beer.ratingOf', { value: rating })}</span>
-						<Rating
-							initialValue={rating}
-							readonly
-							size={16}
-							fillColor="#111111"
-							emptyColor="rgba(17,17,17,0.2)"
-						/>
+						{ratingCount > 0 ? (
+							<>
+								<span className="visually-hidden">{t('beer.ratingOf', { value: rating })}</span>
+								<Rating
+									initialValue={rating}
+									readonly
+									allowFraction
+									size={16}
+									fillColor="#111111"
+									emptyColor="rgba(17,17,17,0.2)"
+								/>
+								<span className="label__rating-count num">
+									{t('beer.ratingCount', { count: ratingCount })}
+								</span>
+							</>
+						) : (
+							<span className="label__rating-count">{t('beer.noRatings')}</span>
+						)}
 					</dd>
 				</div>
 				<div>
