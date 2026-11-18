@@ -56,11 +56,9 @@ Thats all. You can see how it works by run backend with start:dev script and fro
 
 ## CI / CD
 
-- `.github/workflows/ci.yml` runs on pull requests and pushes to `main`: Node 22, `npm ci`, `npm run build`, with `VITE_API_URL=https://beer-catalog-backend.onrender.com`.
-- `.github/workflows/deploy.yml` deploys to Vercel production on push to `main`. Add these repository secrets (do not commit a token):
-  - `VERCEL_TOKEN`
-  - `VERCEL_ORG_ID` = `team_peqVqe2v79Og4AILzWMz0edy`
-  - `VERCEL_PROJECT_ID` = `prj_DonHoMF33KkFQI4eiuZdhjycMElh`
+- `.github/workflows/ci.yml` runs on pull requests and pushes to `main`: Node 22, `npm ci`, `npm run build`, with `VITE_API_URL=https://beer-catalog-backend.onrender.com`. This workflow only checks the build. It does not deploy.
+- Production and preview deployments come from the Vercel Git integration. A push to `main` creates one production deployment (`https://beer-catalog-frontend.vercel.app`). Pushes to any other branch, including pull requests, create a preview deployment. Do not deploy production again from GitHub Actions (`vercel deploy --prod`): that publishes a second production deployment.
+- The Vercel project is on the Hobby plan. A production deployment whose commit author is not the team owner can be blocked. Do not work around that with a CLI deploy from Actions.
 
 ## Environment
 
